@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "165210223863",
+    "firebase_url": "https://foodist-5ef21.firebaseio.com",
+    "project_id": "foodist-5ef21",
+    "storage_bucket": "foodist-5ef21.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:165210223863:android:d7143520f23456a7374ff2",
+        "android_client_info": {
+          "package_name": "com.tecnico.foodist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "165210223863-3rubt82tacrka68u8u250012ss6ldtsh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCa7CUGC5mv33SBfRzxY1POfTZ52goqy6s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "165210223863-3rubt82tacrka68u8u250012ss6ldtsh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

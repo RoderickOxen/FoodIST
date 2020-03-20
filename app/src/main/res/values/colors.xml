@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#009DE0</color>
+    <color name="colorPrimaryDark">#2E3242</color>
+    <color name="colorAccent">#45555F</color>
+
+    <color name="colorTecnicoBlue">#009DE0</color>
+    <color name="colorTecnicoDarr">#2E3242</color>
+    <color name="colorTecnicoAccent">#45555F</color>
+    <color name="colorTecnicoLight">#EEF2F5</color>
+
+    <color name="blueTec1">#006CC6</color>
+    <color name="blueTec2">#007BDC</color>
+    <color name="blueTec3">#009DE0</color>
+
+
+
+
+
+
+
+</resources>
+
+
