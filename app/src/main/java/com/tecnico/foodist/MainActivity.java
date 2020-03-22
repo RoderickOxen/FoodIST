@@ -199,14 +199,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void startFoodIST(){
-
-        Intent intent = new Intent(MainActivity.this, FoodISTActivity.class);
-        intent.putExtra("atAlameda", atAlameda);
-        intent.putExtra("atTagus", atTaguspark);
-        startActivity(intent);
-    }
-
     private void polygonConstructer() {
         // Construct a polygon around alameda
         polygonAlameda.add(new LatLng(38.737882, -9.140786));
@@ -251,35 +243,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.d("al", String.valueOf(isInsideAlameda));
         Log.d("tg", String.valueOf(isInsideTaguspark));
 
+        if (dialog.isShowing()) {
+            dialog.dismiss();
+        }
 
         if (isInsideAlameda){
             atAlameda = true;
+            startFoodIST();
         }else if(isInsideTaguspark){
             atTaguspark = true;
+            startFoodIST();
         }
         else {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("We can't detect your current location. Please insert your campus.")
                     .setCancelable(false)
-                    .setPositiveButton("Alameda", new DialogInterface.OnClickListener() {
+                    .setPositiveButton("Alameda", new DialogInterface.OnClickListener()
+                    {
                         public void onClick(DialogInterface dialog, int id) {
                             atAlameda = true;
+                            startFoodIST();
                         }
                     })
                     .setNegativeButton("Taguspark", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             atTaguspark = true;
+                            startFoodIST();
                         }
                     });
             AlertDialog alert = builder.create();
             alert.show();
         }
 
-        if (dialog.isShowing()) {
-            dialog.dismiss();
-        }
 
-        startFoodIST();
+
+    }
+
+    private void startFoodIST(){
+
+        Intent intent = new Intent(MainActivity.this, FoodISTActivity.class);
+        intent.putExtra("atAlameda", atAlameda);
+        intent.putExtra("atTagus", atTaguspark);
+        startActivity(intent);
     }
 
 
