@@ -248,6 +248,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         boolean isInsideAlameda = PolyUtil.containsLocation(latLng, polygonAlameda, true);
         boolean isInsideTaguspark = PolyUtil.containsLocation(latLng, polygonTagusPark, true);
 
+        Log.d("al", String.valueOf(isInsideAlameda));
+        Log.d("tg", String.valueOf(isInsideTaguspark));
+
+
         if (isInsideAlameda){
             atAlameda = true;
         }else if(isInsideTaguspark){
@@ -271,14 +275,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             alert.show();
         }
 
-
-
-
         if (dialog.isShowing()) {
             dialog.dismiss();
         }
 
-        //startFoodIST();
+        startFoodIST();
     }
 
 
