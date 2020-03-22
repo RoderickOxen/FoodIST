@@ -3,22 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/chatmessage_recycler_view">
-    </androidx.recyclerview.widget.RecyclerView>
-
-
-    <FrameLayout
-        android:id="@+id/user_list_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-251dp">
-
-    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
