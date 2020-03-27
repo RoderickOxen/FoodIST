@@ -29,6 +29,11 @@
     <string name="intent_user_list">intent_user_list</string>
     <string name="fragment_user_list">User List</string>
 
+    <string name="campus">Campus</string>
+    <string name="edit">Edit Profile</string>
+    <string name="name">Person Name</string>
+    <string name="context">Context</string>
+
 
 
 </resources>

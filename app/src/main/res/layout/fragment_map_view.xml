@@ -10,14 +10,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:weightSum="100"
         android:background="@color/colorTecnicoLight">
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="50"
-            android:id="@+id/user_list_recycler_view"/>
+            android:layout_weight="0"
+            android:id="@+id/user_list_recycler_view">
+
+        </androidx.recyclerview.widget.RecyclerView>
 
 
         <RelativeLayout
@@ -26,11 +27,10 @@
             android:layout_weight="50"
             android:id="@+id/map_container">
 
-            <com.google.android.gms.maps.MapView
-                xmlns:android="http://schemas.android.com/apk/res/android"
+            <com.google.android.gms.maps.MapView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/user_list_map"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/user_list_map" />
+                android:layout_height="match_parent" />
         </RelativeLayout>
 
 

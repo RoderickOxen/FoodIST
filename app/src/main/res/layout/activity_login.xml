@@ -51,7 +51,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/relLayout1">
-
             </RelativeLayout>
 
             <LinearLayout
@@ -77,21 +76,22 @@
                     android:text="@string/register"
                     android:textColor="@color/colorTecnicoDarr"
 
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
 
-
-                <Button android:id="@+id/link_anon"
+                <Button
+                    android:id="@+id/link_anon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:text="@string/AnonRegister"
-                    android:gravity="center"
-                    android:textSize="10sp"
-                    android:textColor="@color/colorTecnicoDarr"
                     android:layout_centerHorizontal="true"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"/>
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="20dp"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:text="@string/AnonRegister"
+                    android:textColor="@color/colorTecnicoDarr"
+                    android:textSize="12sp" />
 
             </LinearLayout>
         </LinearLayout>

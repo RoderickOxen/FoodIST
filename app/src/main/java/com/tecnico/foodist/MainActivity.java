@@ -5,6 +5,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import android.Manifest;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -17,6 +19,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -26,6 +29,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.maps.android.PolyUtil;
 import com.tecnico.foodist.ui.FoodISTActivity;
+import com.tecnico.foodist.ui.RestaurantActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +39,7 @@ import static com.tecnico.foodist.util.Constans.PERMISSIONS_REQUEST_ACCESS_FINE_
 import static com.tecnico.foodist.util.Constans.PERMISSIONS_REQUEST_ENABLE_GPS;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener  {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private boolean mLocationPermissionGranted = false;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -44,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean atAlameda = false;
     private boolean atTaguspark = false;
     private ProgressDialog dialog;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,11 +61,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         polygonConstructer();
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
         Log.d("TAG", "created");
     }
-    private boolean checkMapServices(){
-        if(isServicesOK()){
-            if(isMapsEnabled()){
+
+    private boolean checkMapServices() {
+        if (isServicesOK()) {
+            if (isMapsEnabled()) {
                 return true;
             }
         }
@@ -85,34 +90,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     //STEP 1
-    public boolean isServicesOK(){
+    public boolean isServicesOK() {
 
         String TAG = "isServiceOk";
         Log.d(TAG, "isServicesOK: checking google services version");
 
         int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MainActivity.this);
 
-        if(available == ConnectionResult.SUCCESS){
+        if (available == ConnectionResult.SUCCESS) {
             //everything is fine and the user can make map requests
             Log.d(TAG, "isServicesOK: Google Play Services is working");
             return true;
-        }
-        else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
+        } else if (GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
             //an error occured but we can resolve it
             Log.d(TAG, "isServicesOK: an error occured but we can fix it");
             Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MainActivity.this, available, ERROR_DIALOG_REQUEST);
             dialog.show();
-        }else{
+        } else {
             Toast.makeText(this, "You can't make map requests", Toast.LENGTH_SHORT).show();
         }
         return false;
     }
 
     //STEP 2
-    public boolean isMapsEnabled(){
-        final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
+    public boolean isMapsEnabled() {
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
             return false;
         }
@@ -128,10 +132,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.d(TAG, "onActivityResult: called.");
         switch (requestCode) {
             case PERMISSIONS_REQUEST_ENABLE_GPS: {
-                if(mLocationPermissionGranted){
+                if (mLocationPermissionGranted) {
                     Log.d(TAG, "Locaiton granted.");
-                }
-                else{
+                } else {
                     getLocationPermission();
                 }
             }
@@ -179,21 +182,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     @Override
-    public void onClick(View v) { }
+    public void onClick(View v) {
+    }
 
     //Any Activity that restarts has its onResume() method executed first.
     @Override
-    public void onResume(){
+    public void onResume() {
         String TAG = "onResume";
         super.onResume();
-        if (checkMapServices()){
-            if (mLocationPermissionGranted){
+        if (checkMapServices()) {
+            if (mLocationPermissionGranted) {
                 Log.d(TAG, "END");
                 //startFoodIST();
                 getCampus();
 
-            }
-            else{
+            } else {
                 getLocationPermission();
             }
         }
@@ -217,16 +220,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         polygonTagusPark.add(new LatLng(38.738241, -9.302722));
     }
 
-    private void getCampus(){
+    private void getCampus() {
         mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
             @Override
             public void onComplete(@NonNull Task<Location> task) {
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
                     Location location = task.getResult();
                     LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
-                    Log.d("latitude", "latitude: "+ location.getLatitude());
-                    Log.d("longitude", "longitude: "+ location.getLongitude());
+                    Log.d("latitude", "latitude: " + location.getLatitude());
+                    Log.d("longitude", "longitude: " + location.getLongitude());
 
                     //checks if is inside polygon
                     isInside(latLng);
@@ -247,19 +250,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             dialog.dismiss();
         }
 
-        if (isInsideAlameda){
+        if (isInsideAlameda) {
             atAlameda = true;
             startFoodIST();
-        }else if(isInsideTaguspark){
+        } else if (isInsideTaguspark) {
             atTaguspark = true;
             startFoodIST();
-        }
-        else {
+        } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("We can't detect your current location. Please insert your campus.")
                     .setCancelable(false)
-                    .setPositiveButton("Alameda", new DialogInterface.OnClickListener()
-                    {
+                    .setPositiveButton("Alameda", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             atAlameda = true;
                             startFoodIST();
@@ -276,15 +277,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
 
-
     }
 
-    private void startFoodIST(){
+    private void startFoodIST() {
 
         Intent intent = new Intent(MainActivity.this, FoodISTActivity.class);
         intent.putExtra("atAlameda", atAlameda);
-        intent.putExtra("atTagus", atTaguspark);
+        intent.putExtra("atTaguspark", atTaguspark);
         startActivity(intent);
+    }
+
+
+
+
+
+
+
+    public Location getUserLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return null;
+        }
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Location location = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
+
+        Log.d("latitude", String.valueOf(location.getLatitude()));
+        Log.d("longitude", String.valueOf(location.getLongitude()));
+
+        return location;
+
     }
 
 
