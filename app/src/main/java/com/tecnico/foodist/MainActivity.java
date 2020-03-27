@@ -221,6 +221,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void getCampus() {
+        //Location location = getUserLocation();
+        //LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        //isInside(latLng);
+
+
+
+
         mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
             @Override
             public void onComplete(@NonNull Task<Location> task) {
@@ -286,11 +293,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intent.putExtra("atTaguspark", atTaguspark);
         startActivity(intent);
     }
-
-
-
-
-
 
 
     public Location getUserLocation() {

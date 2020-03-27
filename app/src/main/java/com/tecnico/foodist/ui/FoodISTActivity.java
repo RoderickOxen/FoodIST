@@ -1,11 +1,13 @@
 package com.tecnico.foodist.ui;
 
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -24,6 +26,10 @@ public class FoodISTActivity extends AppCompatActivity{
     String s1[] = {"Central", "Aero ", "Mecanica", "Matematica", "Minas", "Biologia", "Civil"};
     String distance = "300 m";
     String queueTime = "3 min";
+    Boolean atAlameda;
+    Boolean atTagus;
+    TextView location;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,29 +39,31 @@ public class FoodISTActivity extends AppCompatActivity{
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // mudar o nome do campus aqui
-        TextView title = findViewById(R.id.toolbarTitle);
+        //get Campus
+        Bundle bundle = getIntent().getExtras();
+        atAlameda = bundle.getBoolean("atAlameda");
+        atTagus = bundle.getBoolean("atTagus");
+        location = findViewById(R.id.toolbarTitle);
 
+
+        if (atAlameda){
+            location.setText("Campus Alameda");
+        }
+        else if (atTagus){
+            location.setText("Campus Taguspark");
+        }
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        title.setOnClickListener(new View.OnClickListener() {
+        location.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Toast.makeText(
-                        getApplicationContext(),
-                        "You clicked on the title",
-                        Toast.LENGTH_SHORT)
-                        .show();
+                changeLocation();
             }
         });
-        //////
 
         recyclerView = findViewById(R.id.recyclerView);
-
-
-
         FoodISTAdapter adapter = new FoodISTAdapter(this, s1, image, distance, queueTime);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -104,6 +112,30 @@ public class FoodISTActivity extends AppCompatActivity{
             to VISIBLE. Otherwise it will go back to being INVISIBLE due to our previous lines
             that set the view to INVISIBLE */
         view.setVisibility(View.VISIBLE);
+    }
+
+    private void changeLocation(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Please select the campus that you want to change to.")
+                .setCancelable(false)
+                .setPositiveButton("Alameda", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        atAlameda = true;
+                        atTagus = false;
+                        location.setText("Campus Alameda");
+
+                    }
+                })
+                .setNegativeButton("Taguspark", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        atTagus = true;
+                        atAlameda = false;
+                        location.setText("Campus Taguspark");
+
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
 }
