@@ -74,7 +74,7 @@
                     android:fontFamily="sans-serif"
                     android:gravity="center"
                     android:text="@string/register"
-                    android:textColor="@color/colorTecnicoDarr"
+                    android:textColor="@color/colorTecnicoDark"
 
                     android:textSize="12sp" />
 
@@ -90,7 +90,7 @@
                     android:fontFamily="sans-serif"
                     android:gravity="center"
                     android:text="@string/AnonRegister"
-                    android:textColor="@color/colorTecnicoDarr"
+                    android:textColor="@color/colorTecnicoDark"
                     android:textSize="12sp" />
 
             </LinearLayout>

@@ -19,7 +19,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -28,8 +27,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.maps.android.PolyUtil;
+import com.tecnico.foodist.models.User;
 import com.tecnico.foodist.ui.FoodISTActivity;
-import com.tecnico.foodist.ui.RestaurantActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean atAlameda = false;
     private boolean atTaguspark = false;
     private ProgressDialog dialog;
+    private User user;
+    private boolean firstTime = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,13 +58,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dialog = new ProgressDialog(this);
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 
-        dialog.setMessage("Please wait.");
-        dialog.show();
+        if (firstTime){
+            dialog.setMessage("Please wait.");
+            dialog.show();
+            polygonConstructer();
+            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+            firstTime = false;
+        }
 
-        polygonConstructer();
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        Log.d("TAG", "created");
     }
 
     private boolean checkMapServices() {
@@ -87,7 +91,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         final AlertDialog alert = builder.create();
         alert.show();
     }
-
 
     //STEP 1
     public boolean isServicesOK() {
@@ -180,7 +183,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
     @Override
     public void onClick(View v) {
     }
@@ -221,13 +223,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void getCampus() {
-        //Location location = getUserLocation();
-        //LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        //isInside(latLng);
-
-
-
-
         mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
             @Override
             public void onComplete(@NonNull Task<Location> task) {
@@ -239,6 +234,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Log.d("longitude", "longitude: " + location.getLongitude());
 
                     //checks if is inside polygon
+                    user = new User(latLng);
                     isInside(latLng);
                 }
             }
@@ -246,6 +242,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void isInside(LatLng latLng) {
+        //creates a new anon with the locations
 
         boolean isInsideAlameda = PolyUtil.containsLocation(latLng, polygonAlameda, true);
         boolean isInsideTaguspark = PolyUtil.containsLocation(latLng, polygonTagusPark, true);
@@ -253,9 +250,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.d("al", String.valueOf(isInsideAlameda));
         Log.d("tg", String.valueOf(isInsideTaguspark));
 
-        if (dialog.isShowing()) {
-            dialog.dismiss();
-        }
+
+
 
         if (isInsideAlameda) {
             atAlameda = true;
@@ -288,25 +284,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void startFoodIST() {
 
+        Log.w("atTagus", String.valueOf(atTaguspark));
+        Log.w("atAlameda", String.valueOf(atAlameda));
+
+
         Intent intent = new Intent(MainActivity.this, FoodISTActivity.class);
         intent.putExtra("atAlameda", atAlameda);
         intent.putExtra("atTaguspark", atTaguspark);
+        intent.putExtra("userLatitude", user.getUserLocation().latitude);
+        intent.putExtra("userLongitude", user.getUserLocation().longitude);
         startActivity(intent);
-    }
-
-
-    public Location getUserLocation() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return null;
-        }
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        Location location = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
-
-        Log.d("latitude", String.valueOf(location.getLatitude()));
-        Log.d("longitude", String.valueOf(location.getLongitude()));
-
-        return location;
-
     }
 
 

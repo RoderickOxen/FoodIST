@@ -1,14 +1,16 @@
 package com.tecnico.foodist.ui;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.firestore.GeoPoint;
 import com.tecnico.foodist.R;
+
+import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,17 +18,30 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class FoodISTAdapter extends RecyclerView.Adapter<FoodISTAdapter.ViewHolder> {
 
-    String data1[];
+    ArrayList<String> rest_names = new ArrayList<String>();
+    ArrayList<String> rest_id = new ArrayList<String>();
+    ArrayList<String> rest_distance_time = new ArrayList<String>();
+    ArrayList<GeoPoint> rest_location = new ArrayList<GeoPoint>();
+
+    //TO DOO
+    /*
+    * Imagem do restaurant, scheeduele time, queue time,
+    * */
+
+
     int images;
     Context context;
-    String distance;
     String queueTime;
 
-    public FoodISTAdapter(Context ct, String s1[], int img, String dist , String queue){
+    public FoodISTAdapter(Context ct, ArrayList<String> id, ArrayList<String> name, int img, ArrayList<String> dist , String queue, ArrayList<GeoPoint> location){
         context =ct;
-        data1 = s1;
+        rest_id = id;
+        rest_names = name;
+        rest_distance_time = dist;
+        rest_location = location;
+
+        //TO DOO
         images = img;
-        distance = dist;
         queueTime = queue;
     }
 
@@ -41,32 +56,29 @@ public class FoodISTAdapter extends RecyclerView.Adapter<FoodISTAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        holder.textView.setText(data1[position]);
-        holder.imageView.setImageResource(images);
+        holder.textView.setText(rest_names.get(position));
+        holder.imageView.setImageAlpha(images);
         holder.textqueue.setText(queueTime);
-        holder.textDistance.setText(distance);
+        holder.textDistance.setText(rest_distance_time.get(position));
 
         holder.theLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                //REVER ESTA MERDA BASICAMENTE VAMOS TER DE TER UM IF CONSOANTE O CLICK DO RESTAURANTE
                 Intent intent = new Intent(context, RestaurantActivity.class);
-                //intent.putExtra("data1", data1[position]);
-                //intent.putExtra("image", images);
-                //intent.putExtra("distance", distance);
-                //intent.putExtra("queueTime", queueTime);
-                context.startActivity(intent);
+                intent.putExtra("rest_names", rest_names.get(position));
+                intent.putExtra("rest_id", rest_id.get(position));
+                intent.putExtra("latitude", rest_location.get(position).getLatitude());
+                intent.putExtra("longitude", rest_location.get(position).getLongitude());
 
+                context.startActivity(intent);
             }
         });
-
-
     }
 
     @Override
     public int getItemCount() {
-        return data1.length;
+        return rest_names.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -84,7 +96,12 @@ public class FoodISTAdapter extends RecyclerView.Adapter<FoodISTAdapter.ViewHold
             textView = itemView.findViewById(R.id.textView1);
             imageView = itemView.findViewById(R.id.imageView1);
             theLayout = itemView.findViewById(R.id.theLayout);
-            //Log.i("LAYOUT",theLayout +"-----------------");
         }
+    }
+
+    public void clear() {
+        rest_names.clear();
+        rest_distance_time.clear();
+        notifyDataSetChanged();
     }
 }

@@ -1,8 +1,11 @@
 package com.tecnico.foodist.ui;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +18,31 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.GeoApiContext;
 import com.tecnico.foodist.R;
 
-public class MapViewFragment extends Fragment implements OnMapReadyCallback {
+public class MapViewFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, View.OnClickListener {
     private MapView mMapView;
     private GoogleMap googleMap;
+
+    private double position_lat;
+    private double position_lon;
+    private String rest_name;
+
+    private static final int MAP_LAYOUT_STATE_CONTRACTED = 0;
+    private static final int MAP_LAYOUT_STATE_EXPANDED = 1;
+    private int mMapLayoutState = 0;
+
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
+
+    public MapViewFragment(double pos_latitude, double pos_longitude, String name) {
+        this.position_lat = pos_latitude;
+        this.position_lon = pos_longitude;
+        this.rest_name = name;
+
+    }
 
     @Nullable
     @Override
@@ -29,6 +50,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         View view = inflater.inflate(R.layout.fragment_map_view,container,false);
         mMapView = (MapView) view.findViewById(R.id.user_list_map);
         initGoogleMap(savedInstanceState);
+        view.findViewById(R.id.btn_full_screen_map).setOnClickListener(this);
         return view;
     }
 
@@ -40,11 +62,11 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
         mMapView.onCreate(mapViewBundle);
         mMapView.getMapAsync(this);
+
     }
 
-
-    public static MapViewFragment newInstance(){
-        return new MapViewFragment();
+    public static MapViewFragment newInstance(double pos_latitude, double pos_longitude, String name){
+        return new MapViewFragment(pos_latitude, pos_longitude, name);
     }
 
     @Override
@@ -75,6 +97,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         }
         map.setMyLocationEnabled(true);
         googleMap = map;
+        googleMap.setOnMarkerClickListener(this);
         setCameraView();
     }
 
@@ -96,22 +119,66 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         mMapView.onLowMemory();
     }
 
-    private void setUserPosition(){
-        //loop through all user positions and getID
+    private void setCameraView(){
+        LatLng marker = new LatLng(position_lat, position_lon);
+        googleMap.addMarker(new MarkerOptions().position(marker)
+                .title(rest_name));
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(position_lat,position_lon), 18));
     }
 
-    private void setCameraView(){
-        //passar depois a ir buscar com base se  user estiver na AL ou NO TG
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        Log.w("marker", "clicked");
 
-        //vai buscar à db dependendo do resurante que se trata
-        double latitude = 38.736384;
-        double longitude = -9.136968;
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setMessage(marker.getSnippet())
+                .setMessage("want to directions to: " + rest_name)
+                .setCancelable(true)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        getDirections();
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+
+        return true;
+    }
+
+    private void getDirections() {
+    }
 
 
-        LatLng sydney = new LatLng(latitude, -9.136968);
-        googleMap.addMarker(new MarkerOptions().position(sydney)
-                .title("Cantina"));
+    @Override
+    public void onClick(View v) {
+        Log.w("click", "but");
 
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude,longitude), 18));
+        switch (v.getId()){
+            //TO DOOO
+            case R.id.btn_full_screen_map:{
+                //go full
+                if(mMapLayoutState == MAP_LAYOUT_STATE_CONTRACTED){
+                    mMapLayoutState = MAP_LAYOUT_STATE_EXPANDED;
+                    Log.w("1", "MAP_LAYOUT_STATE_CONTRACTED");
+
+                }
+                //go 50
+                else if(mMapLayoutState == MAP_LAYOUT_STATE_EXPANDED){
+                    mMapLayoutState = MAP_LAYOUT_STATE_CONTRACTED;
+                    Log.w("2", "MAP_LAYOUT_STATE_EXPANDED");
+                }
+                break;
+            }
+
+        }
+
     }
 }
