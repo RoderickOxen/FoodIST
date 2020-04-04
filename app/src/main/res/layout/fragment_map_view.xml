@@ -23,18 +23,6 @@
                 android:layout_height="match_parent"
                 />
 
-            <ImageButton
-                android:id="@+id/btn_full_screen_map"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="365dp"
-                android:layout_marginRight="365dp"
-                android:background="@color/white"
-                android:src="@drawable/ic_fullscreen_black_24dp" />
-
         </RelativeLayout>
     </LinearLayout>
 </RelativeLayout>

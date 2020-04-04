@@ -23,17 +23,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.GeoApiContext;
 import com.tecnico.foodist.R;
 
-public class MapViewFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, View.OnClickListener {
+public class MapViewFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
     private MapView mMapView;
     private GoogleMap googleMap;
 
     private double position_lat;
     private double position_lon;
     private String rest_name;
-
-    private static final int MAP_LAYOUT_STATE_CONTRACTED = 0;
-    private static final int MAP_LAYOUT_STATE_EXPANDED = 1;
-    private int mMapLayoutState = 0;
 
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
 
@@ -50,7 +46,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
         View view = inflater.inflate(R.layout.fragment_map_view,container,false);
         mMapView = (MapView) view.findViewById(R.id.user_list_map);
         initGoogleMap(savedInstanceState);
-        view.findViewById(R.id.btn_full_screen_map).setOnClickListener(this);
         return view;
     }
 
@@ -154,31 +149,5 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Goo
     }
 
     private void getDirections() {
-    }
-
-
-    @Override
-    public void onClick(View v) {
-        Log.w("click", "but");
-
-        switch (v.getId()){
-            //TO DOOO
-            case R.id.btn_full_screen_map:{
-                //go full
-                if(mMapLayoutState == MAP_LAYOUT_STATE_CONTRACTED){
-                    mMapLayoutState = MAP_LAYOUT_STATE_EXPANDED;
-                    Log.w("1", "MAP_LAYOUT_STATE_CONTRACTED");
-
-                }
-                //go 50
-                else if(mMapLayoutState == MAP_LAYOUT_STATE_EXPANDED){
-                    mMapLayoutState = MAP_LAYOUT_STATE_CONTRACTED;
-                    Log.w("2", "MAP_LAYOUT_STATE_EXPANDED");
-                }
-                break;
-            }
-
-        }
-
     }
 }

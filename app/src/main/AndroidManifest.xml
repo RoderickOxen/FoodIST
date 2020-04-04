@@ -28,6 +28,19 @@
         </activity>
 
         <activity
+            android:name=".ui.RestaurantProfileActivity">
+        </activity>
+
+        <activity
+            android:name=".ui.MenuActivity">
+        </activity>
+
+        <activity
+            android:name=".ui.DishDetailsActivity">
+        </activity>
+
+
+        <activity
             android:name=".ui.FoodISTActivity">
         </activity>
 

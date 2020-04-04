@@ -1,4 +1,4 @@
-package com.tecnico.foodist.ui;
+/*package com.tecnico.foodist.ui;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,11 +7,8 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.tecnico.foodist.R;
-
 import java.util.ArrayList;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -68,4 +65,4 @@ public class RestaurantProperties extends RecyclerView.Adapter<RestaurantPropert
             parentLayout = itemView.findViewById(R.id.parent_layout);
         }
     }
-}
+}*/

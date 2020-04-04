@@ -1,4 +1,4 @@
-package com.tecnico.foodist.ui;
+/*package com.tecnico.foodist.ui;
 
 import android.os.Bundle;
 import android.view.View;
@@ -118,4 +118,4 @@ public class RestaurantActivity extends AppCompatActivity implements View.OnClic
     }
 
 
-}
+}*/

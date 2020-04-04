@@ -65,7 +65,7 @@ public class FoodISTAdapter extends RecyclerView.Adapter<FoodISTAdapter.ViewHold
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(context, RestaurantActivity.class);
+                Intent intent = new Intent(context, RestaurantProfileActivity.class);
                 intent.putExtra("rest_names", rest_names.get(position));
                 intent.putExtra("rest_id", rest_id.get(position));
                 intent.putExtra("latitude", rest_location.get(position).getLatitude());
