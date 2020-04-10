@@ -2,12 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tecnico.foodist">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
-    <uses-permission
-        android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -21,32 +19,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         >
-        <activity android:name=".MainActivity"></activity>
 
-        <activity
-            android:name=".ui.RestaurantActivity">
-        </activity>
-
-        <activity
-            android:name=".ui.RestaurantProfileActivity">
-        </activity>
-
-        <activity
-            android:name=".ui.MenuActivity">
-        </activity>
-
-        <activity
-            android:name=".ui.DishDetailsActivity">
-        </activity>
-
-
-        <activity
-            android:name=".ui.FoodISTActivity">
-        </activity>
-
-        <activity
-            android:name=".ui.ProfileActivity">
-        </activity>
+        <activity android:name=".MainActivity" />
+        <activity android:name=".ui.RestaurantProfileActivity" />
+        <activity android:name=".ui.MenuActivity" />
+        <activity android:name=".ui.DishDetailsActivity" />
+        <activity android:name=".ui.FullMapActivity" />
+        <activity android:name=".ui.FoodISTActivity" />
+        <activity android:name=".ui.ProfileActivity" />
 
         <activity android:name=".ui.LoginActivity">
             <intent-filter>

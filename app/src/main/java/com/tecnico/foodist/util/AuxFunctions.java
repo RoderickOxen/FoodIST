@@ -1,5 +1,7 @@
 package com.tecnico.foodist.util;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.text.DecimalFormat;
 
 public class AuxFunctions {
@@ -24,4 +26,6 @@ public class AuxFunctions {
             return (dist); //*1000 meters
         }
     }
+
+
 }

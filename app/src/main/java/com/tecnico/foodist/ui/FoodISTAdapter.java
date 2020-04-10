@@ -8,6 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.firestore.GeoPoint;
+import com.google.maps.model.Duration;
+import com.google.maps.model.LatLng;
 import com.tecnico.foodist.R;
 
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ public class FoodISTAdapter extends RecyclerView.Adapter<FoodISTAdapter.ViewHold
 
     ArrayList<String> rest_names = new ArrayList<String>();
     ArrayList<String> rest_id = new ArrayList<String>();
-    ArrayList<String> rest_distance_time = new ArrayList<String>();
+    ArrayList<Duration> rest_distance_time = new ArrayList<Duration>();
     ArrayList<GeoPoint> rest_location = new ArrayList<GeoPoint>();
 
     //TO DOO
@@ -33,7 +35,7 @@ public class FoodISTAdapter extends RecyclerView.Adapter<FoodISTAdapter.ViewHold
     Context context;
     String queueTime;
 
-    public FoodISTAdapter(Context ct, ArrayList<String> id, ArrayList<String> name, int img, ArrayList<String> dist , String queue, ArrayList<GeoPoint> location){
+    public FoodISTAdapter(Context ct, ArrayList<String> id, ArrayList<String> name, int img, ArrayList<Duration> dist , String queue, ArrayList<GeoPoint> location){
         context =ct;
         rest_id = id;
         rest_names = name;
@@ -59,7 +61,7 @@ public class FoodISTAdapter extends RecyclerView.Adapter<FoodISTAdapter.ViewHold
         holder.textView.setText(rest_names.get(position));
         holder.imageView.setImageAlpha(images);
         holder.textqueue.setText(queueTime);
-        holder.textDistance.setText(rest_distance_time.get(position));
+        holder.textDistance.setText(rest_distance_time.get(position).toString() + " walking");
 
         holder.theLayout.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,12 +1,11 @@
 package com.tecnico.foodist;
 
+//import androidx.annotation.;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
-import android.Manifest;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -48,23 +47,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean atTaguspark = false;
     private ProgressDialog dialog;
     private User user;
-    private boolean firstTime = true;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         dialog = new ProgressDialog(this);
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 
-        if (firstTime){
-            dialog.setMessage("Please wait.");
-            dialog.show();
-            polygonConstructer();
-            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-            firstTime = false;
-        }
+        dialog.setMessage("Please wait.");
+        dialog.show();
+        polygonConstructer();
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
 
     }
@@ -195,7 +191,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (checkMapServices()) {
             if (mLocationPermissionGranted) {
                 Log.d(TAG, "END");
-                //startFoodIST();
                 getCampus();
 
             } else {
@@ -243,15 +238,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void isInside(LatLng latLng) {
         //creates a new anon with the locations
-
         boolean isInsideAlameda = PolyUtil.containsLocation(latLng, polygonAlameda, true);
         boolean isInsideTaguspark = PolyUtil.containsLocation(latLng, polygonTagusPark, true);
 
         Log.d("al", String.valueOf(isInsideAlameda));
         Log.d("tg", String.valueOf(isInsideTaguspark));
-
-
-
 
         if (isInsideAlameda) {
             atAlameda = true;

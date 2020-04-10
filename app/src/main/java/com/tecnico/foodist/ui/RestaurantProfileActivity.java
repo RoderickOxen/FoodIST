@@ -11,10 +11,9 @@ import java.util.ArrayList;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-public class RestaurantProfileActivity extends AppCompatActivity  {
+public class RestaurantProfileActivity extends AppCompatActivity   {
 
     private ArrayList<String> mProperties = new ArrayList<>();
     private String rest_name;
@@ -34,6 +33,7 @@ public class RestaurantProfileActivity extends AppCompatActivity  {
         rest_id =  bundle.getString("rest_id");
         rest_location_lat = bundle.getDouble("latitude");
         rest_location_lon =bundle.getDouble("longitude");
+
 
         Button button = findViewById(R.id.menu_button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +70,6 @@ public class RestaurantProfileActivity extends AppCompatActivity  {
     private void hideSoftKeyboard(){
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
-
 
 
 
