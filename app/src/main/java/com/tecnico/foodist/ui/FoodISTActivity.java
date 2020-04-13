@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -18,12 +20,16 @@ import android.view.animation.AlphaAnimation;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.maps.DirectionsApi;
 import com.google.maps.GeoApiContext;
 import com.google.maps.errors.ApiException;
@@ -32,8 +38,11 @@ import com.google.maps.model.Duration;
 import com.google.maps.model.LatLng;
 import com.google.maps.model.TravelMode;
 import com.tecnico.foodist.R;
+import com.tecnico.foodist.models.Restaurant;
+
 import java.io.IOException;
 import java.util.ArrayList;
+
 
 
 
@@ -42,6 +51,11 @@ public class FoodISTActivity extends AppCompatActivity {
     //recycler view elements
     private RecyclerView recyclerView;
     private FoodISTAdapter adapter;
+
+    //Restaurant
+    private ArrayList<Restaurant> restaurants= new ArrayList<>();
+
+
     private ArrayList<String> restaurants_name = new ArrayList<String>();
     private ArrayList<String> restaurants_id = new ArrayList<String>();
     private ArrayList<GeoPoint> restaurants_alameda_geoPoint = new ArrayList<GeoPoint>();
@@ -60,7 +74,9 @@ public class FoodISTActivity extends AppCompatActivity {
 
     //TTO DO
     String queueTime = "Queue time: XXX";
-    private int image = R.drawable.food900x700;
+    private FirebaseStorage storage;
+    private Bitmap image; // = R.drawable.food900x700;
+
 
 
     //For calculating the duration
@@ -103,6 +119,7 @@ public class FoodISTActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 adapter.clear();
+                restaurants.clear();
 
                 restaurants_name.clear();
                 restaurants_alameda_geoPoint.clear();
@@ -111,10 +128,13 @@ public class FoodISTActivity extends AppCompatActivity {
                 restaurants_time_distance.clear();
 
                 //fetch the current data from database
-                if (atAlameda){getRestaurantsAlameda();} else {getRestaurantsTagusPark();}
-
+                if (atAlameda){
+                    getRestaurantsAlameda();
+                }
+                else {
+                    getRestaurantsTagusPark();
+                }
                 Toast.makeText(FoodISTActivity.this, "Refresh successful!", Toast.LENGTH_SHORT).show();
-
                 pullToRefresh.setRefreshing(false);
 
             }
@@ -217,26 +237,31 @@ public class FoodISTActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()){
                     for (QueryDocumentSnapshot document : task.getResult()) {
+                        Restaurant restaurant = new Restaurant(null, null,null,null);
 
                         //get restaurant name
                         String name = document.getString("Name");
                         Log.w("Firebase-Name", name);
-                        addRestaurantName(name);
+                        restaurant.setRestaurants_name(name);
 
                         //get restaurant location
                         GeoPoint geoPoint = document.getGeoPoint("location");
                         Log.w("Firebase-location", String.valueOf(geoPoint));
-                        addRestaurantAlamedaGeoPoint(geoPoint);
+                        restaurant.setRestaurants_geoPoint(geoPoint);
 
                         //Calculate restaurant time to get there walking
-                        durantionWalkingToRestaurant(geoPoint.getLatitude(),geoPoint.getLongitude());
+                        restaurant.setRestaurants_time_distance(getDuration(geoPoint.getLatitude(),geoPoint.getLongitude()));
 
                         //get restaurante id
                         String id = document.getString("r_id");
                         Log.w("Firebase-Id", id);
-                        addRestaurantId(id);
+                        restaurant.setRestaurants_id(id);
+
+                        restaurants.add(restaurant);
+
 
                     }
+                    firebasestorage();
                     setRecyclerViewRestaurants();
                 }
             }
@@ -253,25 +278,30 @@ public class FoodISTActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()){
                     for (QueryDocumentSnapshot document : task.getResult()) {
+                        Restaurant restaurant = new Restaurant(null, null,null,null);
 
                         //get restaurant name
                         String name = document.getString("Name");
                         Log.w("Firebase-Name", name);
-                        addRestaurantName(name);
+                        restaurant.setRestaurants_name(name);
 
                         //get restaurant location
                         GeoPoint geoPoint = document.getGeoPoint("location");
                         Log.w("Firebase-location", String.valueOf(geoPoint));
-                        addRestaurantTagusGeoPoint(geoPoint);
+                        restaurant.setRestaurants_geoPoint(geoPoint);
 
                         //Calculate restaurant time to get there walking
-                        durantionWalkingToRestaurant(geoPoint.getLatitude(),geoPoint.getLongitude());
+                        restaurant.setRestaurants_time_distance(getDuration(geoPoint.getLatitude(),geoPoint.getLongitude()));
 
                         //get restaurante id
                         String id = document.getString("r_id");
                         Log.w("Firebase-Id", id);
-                        addRestaurantId(id);
+                        restaurant.setRestaurants_id(id);
+
+                        restaurants.add(restaurant);
+
                     }
+                    firebasestorage();
                     setRecyclerViewRestaurants();
                 }
 
@@ -280,25 +310,8 @@ public class FoodISTActivity extends AppCompatActivity {
 
     }
 
-    private void addRestaurantAlamedaGeoPoint(GeoPoint geoPoint) {
-        restaurants_alameda_geoPoint.add(geoPoint);
-    }
-    private void addRestaurantTagusGeoPoint(GeoPoint geoPoint) {
-        restaurants_tagus_geoPoint.add(geoPoint);
-    }
-    public void addRestaurantName(String name){
 
-        restaurants_name.add(name);
-    }
-    public void addRestaurantId(String name){
-        restaurants_id.add(name);
-    }
-    public void addDistanceTime(Duration time){
-        restaurants_time_distance.add(time);
-    }
-
-
-    public void durantionWalkingToRestaurant(double lat, double lon){
+    public Duration getDuration(double lat, double lon){
         try {
             DirectionsResult result = DirectionsApi.newRequest(geoApiContext)
                     .mode(TravelMode.WALKING)
@@ -307,7 +320,7 @@ public class FoodISTActivity extends AppCompatActivity {
                     .await();
 
             Log.w("DirectionsResult", String.valueOf(result.routes[0].legs[0].duration));
-            addDistanceTime(result.routes[0].legs[0].duration);
+            return result.routes[0].legs[0].duration;
 
         } catch (ApiException e) {
             e.printStackTrace();
@@ -316,17 +329,48 @@ public class FoodISTActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
+    }
+
+    public void firebasestorage(){
+
+        //get the Firebase  storage reference
+        storage = FirebaseStorage.getInstance();
+
+        StorageReference imgReference = storage.getReference()
+                .child("restaurantsProfilesPictures")  //image folder
+                .child("gnochi700x636.jpg");
+        //"gnochi700x636.jpg"
+        //"food900x700.jpg"
+
+        //download files as bytes
+        final long ONE_MEGABYTE = 1024 * 1024;
+        imgReference.getBytes(ONE_MEGABYTE)
+                .addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+                        image = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                        Log.w("storage","aqui");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("storage",e);
+            }
+        });
     }
 
 
     public void setRecyclerViewRestaurants(){
+        firebasestorage();
+
         recyclerView = findViewById(R.id.recyclerView);
 
         if (atAlameda){
-            adapter = new FoodISTAdapter(this, restaurants_id , restaurants_name, image, restaurants_time_distance, queueTime, restaurants_alameda_geoPoint);
+            adapter = new FoodISTAdapter(this, image, queueTime, restaurants);
         }
         else{
-            adapter = new FoodISTAdapter(this, restaurants_id , restaurants_name, image, restaurants_time_distance, queueTime, restaurants_tagus_geoPoint);
+            adapter = new FoodISTAdapter(this, image, queueTime, restaurants);
 
         }
         recyclerView.setAdapter(adapter);

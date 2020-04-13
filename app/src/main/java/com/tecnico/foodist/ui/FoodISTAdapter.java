@@ -1,16 +1,14 @@
 package com.tecnico.foodist.ui;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.google.firebase.firestore.GeoPoint;
-import com.google.maps.model.Duration;
-import com.google.maps.model.LatLng;
 import com.tecnico.foodist.R;
+import com.tecnico.foodist.models.Restaurant;
 
 import java.util.ArrayList;
 
@@ -20,10 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class FoodISTAdapter extends RecyclerView.Adapter<FoodISTAdapter.ViewHolder> {
 
-    ArrayList<String> rest_names = new ArrayList<String>();
-    ArrayList<String> rest_id = new ArrayList<String>();
-    ArrayList<Duration> rest_distance_time = new ArrayList<Duration>();
-    ArrayList<GeoPoint> rest_location = new ArrayList<GeoPoint>();
+    ArrayList<Restaurant> restaurants;
+
 
     //TO DOO
     /*
@@ -31,22 +27,19 @@ public class FoodISTAdapter extends RecyclerView.Adapter<FoodISTAdapter.ViewHold
     * */
 
 
-    int images;
+    Bitmap images;
     Context context;
     String queueTime;
 
-    public FoodISTAdapter(Context ct, ArrayList<String> id, ArrayList<String> name, int img, ArrayList<Duration> dist , String queue, ArrayList<GeoPoint> location){
+
+    public FoodISTAdapter(Context ct, Bitmap img, String queue, ArrayList<Restaurant> r){
         context =ct;
-        rest_id = id;
-        rest_names = name;
-        rest_distance_time = dist;
-        rest_location = location;
+        restaurants = r;
 
         //TO DOO
         images = img;
         queueTime = queue;
     }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -58,20 +51,22 @@ public class FoodISTAdapter extends RecyclerView.Adapter<FoodISTAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        holder.textView.setText(rest_names.get(position));
-        holder.imageView.setImageAlpha(images);
+        holder.textView.setText(restaurants.get(position).getRestaurants_name());
+        holder.textDistance.setText(restaurants.get(position).getRestaurants_time_distance().toString() + " walking");
+
+        //TODO
+        holder.imageView.setImageBitmap(images);
         holder.textqueue.setText(queueTime);
-        holder.textDistance.setText(rest_distance_time.get(position).toString() + " walking");
 
         holder.theLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Intent intent = new Intent(context, RestaurantProfileActivity.class);
-                intent.putExtra("rest_names", rest_names.get(position));
-                intent.putExtra("rest_id", rest_id.get(position));
-                intent.putExtra("latitude", rest_location.get(position).getLatitude());
-                intent.putExtra("longitude", rest_location.get(position).getLongitude());
+                intent.putExtra("rest_names", restaurants.get(position).getRestaurants_name());
+                intent.putExtra("rest_id", restaurants.get(position).getRestaurants_id());
+                intent.putExtra("latitude", restaurants.get(position).getRestaurants_geoPoint().getLatitude());
+                intent.putExtra("longitude", restaurants.get(position).getRestaurants_geoPoint().getLongitude());
 
                 context.startActivity(intent);
             }
@@ -80,7 +75,7 @@ public class FoodISTAdapter extends RecyclerView.Adapter<FoodISTAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return rest_names.size();
+        return restaurants.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -102,8 +97,7 @@ public class FoodISTAdapter extends RecyclerView.Adapter<FoodISTAdapter.ViewHold
     }
 
     public void clear() {
-        rest_names.clear();
-        rest_distance_time.clear();
+        restaurants.clear();
         notifyDataSetChanged();
     }
 }

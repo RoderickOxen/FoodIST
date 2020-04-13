@@ -2,7 +2,6 @@ package com.tecnico.foodist.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,13 +24,13 @@ public class DishDetailsAdapter extends RecyclerView.Adapter<DishDetailsAdapter.
     @Override
     public DishDetailsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.foodist_row, parent, false);
+        View view = inflater.inflate(R.layout.dish_details_feed_row, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull DishDetailsAdapter.ViewHolder holder, int position) {
-        holder.imageView.setImageResource(images[position]);
+        //holder.imageView.setImageResource(images[position]);
 
         holder.theLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,6 +45,7 @@ public class DishDetailsAdapter extends RecyclerView.Adapter<DishDetailsAdapter.
 
     @Override
     public int getItemCount() {
+        /*
         Log.i("LAYOUT",images.length+"-----------------");
         if(Math.round((images.length+1)/3) == (images.length+1)/3){
             Log.i("LAYOUT",Math.round((images.length+1)/3) +"-----------------");
@@ -56,6 +56,8 @@ public class DishDetailsAdapter extends RecyclerView.Adapter<DishDetailsAdapter.
             return Math.round((images.length+1)/3 - 1/2) + 1;
         }
 
+        */
+        return images.length;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

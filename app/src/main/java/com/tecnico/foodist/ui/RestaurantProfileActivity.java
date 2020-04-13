@@ -34,7 +34,6 @@ public class RestaurantProfileActivity extends AppCompatActivity   {
         rest_location_lat = bundle.getDouble("latitude");
         rest_location_lon =bundle.getDouble("longitude");
 
-
         Button button = findViewById(R.id.menu_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
