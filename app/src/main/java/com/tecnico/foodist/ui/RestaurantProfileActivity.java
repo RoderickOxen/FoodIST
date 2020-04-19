@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
+
 import com.tecnico.foodist.R;
 
 import java.util.ArrayList;
@@ -34,6 +36,9 @@ public class RestaurantProfileActivity extends AppCompatActivity   {
         rest_location_lat = bundle.getDouble("latitude");
         rest_location_lon =bundle.getDouble("longitude");
 
+        //set image view
+        setImageView();
+
         Button button = findViewById(R.id.menu_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,6 +52,46 @@ public class RestaurantProfileActivity extends AppCompatActivity   {
 
 
     }
+
+    private void setImageView() {
+        ImageView myImageView = (ImageView)findViewById(R.id.imageDetail);
+
+        switch(rest_id) {
+            case "ae":
+                myImageView.setImageResource(R.drawable.ae);
+                break;
+            case "civil":
+                myImageView.setImageResource(R.drawable.civil);
+                break;
+            case "matematica":
+                myImageView.setImageResource(R.drawable.matematica);
+                break;
+            case "mecanica":
+                myImageView.setImageResource(R.drawable.mecanica);
+                break;
+            case "central":
+                myImageView.setImageResource(R.drawable.central);
+                break;
+            case "quimica":
+                myImageView.setImageResource(R.drawable.quimica);
+                break;
+            case "amarelo":
+                myImageView.setImageResource(R.drawable.amarelo);
+                break;
+            case "maquinas":
+                myImageView.setImageResource(R.drawable.maquinas);
+                break;
+            case "redbar":
+                myImageView.setImageResource(R.drawable.redbar);
+                break;
+            case "cantina":
+                myImageView.setImageResource(R.drawable.cantina);
+                break;
+            default:
+                myImageView.setImageResource(R.drawable.buffet1600x800);
+        }
+    }
+
     public void openMenuActivity(){
         Intent intent = new Intent(this, MenuActivity.class);
         startActivity(intent);

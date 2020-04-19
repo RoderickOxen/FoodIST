@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "165210223863-v6qu3cuvi5glkndem7553s19brps9hqa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tecnico.foodist",
+            "certificate_hash": "5515c9a949d4b87cca43a44097d4e50456f2e3b8"
+          }
+        },
+        {
           "client_id": "165210223863-3rubt82tacrka68u8u250012ss6ldtsh.apps.googleusercontent.com",
           "client_type": 3
         }

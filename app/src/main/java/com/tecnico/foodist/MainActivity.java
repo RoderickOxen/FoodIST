@@ -47,12 +47,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean atTaguspark = false;
     private ProgressDialog dialog;
     private User user;
+    private Boolean logIn=false;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Bundle bundle = getIntent().getExtras();
+        logIn = bundle.getBoolean("logIn");
 
         dialog = new ProgressDialog(this);
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -284,6 +288,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intent.putExtra("atTaguspark", atTaguspark);
         intent.putExtra("userLatitude", user.getUserLocation().latitude);
         intent.putExtra("userLongitude", user.getUserLocation().longitude);
+        intent.putExtra("logIn", logIn);
+
+        Log.w("LogIn-Main", String.valueOf(logIn));
+
+
+
         startActivity(intent);
     }
 

@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
@@ -67,6 +68,7 @@ public class FoodISTActivity extends AppCompatActivity {
     private Boolean atTagus;
     private Double userLatitude;
     private Double userLongitude;
+    private Boolean logIn;
 
     //toolbar campus locaiton
     private Toolbar toolbar;
@@ -76,6 +78,8 @@ public class FoodISTActivity extends AppCompatActivity {
     String queueTime = "Queue time: XXX";
     private FirebaseStorage storage;
     private Bitmap image; // = R.drawable.food900x700;
+
+
 
 
 
@@ -139,6 +143,8 @@ public class FoodISTActivity extends AppCompatActivity {
 
             }
         });
+
+
     }
 
     private void setCampusOnToolbar() {
@@ -147,6 +153,9 @@ public class FoodISTActivity extends AppCompatActivity {
         atTagus = bundle.getBoolean("atTaguspark");
         userLatitude = bundle.getDouble("userLatitude");
         userLongitude = bundle.getDouble("userLongitude");
+        logIn = bundle.getBoolean("logIn");
+
+        Log.w("LogIn", String.valueOf(logIn));
 
         location = findViewById(R.id.toolbarTitle);
         if (atAlameda){
@@ -168,15 +177,31 @@ public class FoodISTActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.miCompose:
-                Toast.makeText(
-                        getApplicationContext(),
-                        "You clicked on the profile button",
-                        Toast.LENGTH_SHORT)
-                        .show();
-                startActivity(new Intent(getApplicationContext(), ProfileActivity.class ));
+
+                if (!logIn){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setMessage("You need to create an Account and Log In to access this feature. Want to create one?")
+                            .setCancelable(true)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+                                    dialog.dismiss();
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    builder.create().show();
+                }
+                else{
+                    startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+
+                }
+
                 return true;
 
             default:

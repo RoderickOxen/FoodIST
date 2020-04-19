@@ -27,6 +27,8 @@
         <activity android:name=".ui.FullMapActivity" />
         <activity android:name=".ui.FoodISTActivity" />
         <activity android:name=".ui.ProfileActivity" />
+        <activity android:name=".ui.CreateAccountActivity" />
+
 
         <activity android:name=".ui.LoginActivity">
             <intent-filter>

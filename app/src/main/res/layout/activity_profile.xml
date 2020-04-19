@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.ProfileActivity">
+    tools:context=".ui.ProfileActivity"
+    android:background="@color/blueTec3">
 
     <ImageView
         android:id="@+id/imageView"
@@ -18,35 +19,27 @@
         app:srcCompat="@drawable/ic_person_24dp" />
 
     <TextView
-        android:id="@+id/nameText"
-        android:layout_width="102dp"
-        android:layout_height="34dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/name"
+        android:id="@+id/emailText"
+        android:layout_width="290dp"
+        android:layout_height="67dp"
+        android:text="Email"
+        android:textColor="@color/colorTecnicoDark"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-    <TextView
-        android:id="@+id/contextText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/context"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameText" />
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
 
     <Button
-        android:id="@+id/editButton"
+        android:id="@+id/logoutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
-        android:text="@string/edit"
+        android:text="Logout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/contextText" />
+        app:layout_constraintTop_toBottomOf="@+id/emailText" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -23,8 +23,8 @@ public class FoodISTAdapter extends RecyclerView.Adapter<FoodISTAdapter.ViewHold
 
     //TO DOO
     /*
-    * Imagem do restaurant, scheeduele time, queue time,
-    * */
+     * scheeduele time, queue time,
+     * */
 
 
     Bitmap images;
@@ -34,7 +34,7 @@ public class FoodISTAdapter extends RecyclerView.Adapter<FoodISTAdapter.ViewHold
 
     public FoodISTAdapter(Context ct, Bitmap img, String queue, ArrayList<Restaurant> r){
         context =ct;
-        restaurants = r;
+        restaurants = r ;
 
         //TO DOO
         images = img;
@@ -54,9 +54,46 @@ public class FoodISTAdapter extends RecyclerView.Adapter<FoodISTAdapter.ViewHold
         holder.textView.setText(restaurants.get(position).getRestaurants_name());
         holder.textDistance.setText(restaurants.get(position).getRestaurants_time_distance().toString() + " walking");
 
-        //TODO
-        holder.imageView.setImageBitmap(images);
+
+        switch(restaurants.get(position).getRestaurants_id()) {
+            case "ae":
+                holder.imageView.setImageResource(R.drawable.ae);
+                break;
+            case "civil":
+                holder.imageView.setImageResource(R.drawable.civil);
+                break;
+            case "matematica":
+                holder.imageView.setImageResource(R.drawable.matematica);
+                break;
+            case "mecanica":
+                holder.imageView.setImageResource(R.drawable.mecanica);
+                break;
+            case "central":
+                holder.imageView.setImageResource(R.drawable.central);
+                break;
+            case "quimica":
+                holder.imageView.setImageResource(R.drawable.quimica);
+                break;
+            case "amarelo":
+                holder.imageView.setImageResource(R.drawable.amarelo);
+                break;
+            case "maquinas":
+                holder.imageView.setImageResource(R.drawable.maquinas);
+                break;
+            case "redbar":
+                holder.imageView.setImageResource(R.drawable.redbar);
+                break;
+            case "cantina":
+                holder.imageView.setImageResource(R.drawable.cantina);
+                break;
+            default:
+                holder.imageView.setImageResource(R.drawable.buffet1600x800);
+        }
+
+
+        //TO DO
         holder.textqueue.setText(queueTime);
+
 
         holder.theLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +124,6 @@ public class FoodISTAdapter extends RecyclerView.Adapter<FoodISTAdapter.ViewHold
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
             textDistance =  itemView.findViewById(R.id.distanceTime);
             textqueue =  itemView.findViewById(R.id.queueTime);
             textView = itemView.findViewById(R.id.textView1);
