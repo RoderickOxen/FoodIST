@@ -26,8 +26,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText email;
     private EditText password;
     private ProgressDialog dialog;
-    private Context context;
-
 
 
 
@@ -72,7 +70,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId()){
             case R.id.link_anon:{
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.putExtra("logIn",false);
                 startActivity(intent);
                 break;
             }
@@ -110,7 +107,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             dialog.dismiss();
                             Toast.makeText(LoginActivity.this, "User Login with Success.", Toast.LENGTH_SHORT).show();
                             Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
-                            myIntent.putExtra("logIn",true);
                             LoginActivity.this.startActivity(myIntent);
                             Log.d("logInSuccess", "signInWithEmailAndPassword:success");
 

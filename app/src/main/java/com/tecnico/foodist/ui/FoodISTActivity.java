@@ -68,7 +68,6 @@ public class FoodISTActivity extends AppCompatActivity {
     private Boolean atTagus;
     private Double userLatitude;
     private Double userLongitude;
-    private Boolean logIn;
 
     //toolbar campus locaiton
     private Toolbar toolbar;
@@ -153,11 +152,9 @@ public class FoodISTActivity extends AppCompatActivity {
         atTagus = bundle.getBoolean("atTaguspark");
         userLatitude = bundle.getDouble("userLatitude");
         userLongitude = bundle.getDouble("userLongitude");
-        logIn = bundle.getBoolean("logIn");
-
-        Log.w("LogIn", String.valueOf(logIn));
-
         location = findViewById(R.id.toolbarTitle);
+
+
         if (atAlameda){
             location.setText("Campus Alameda");
         }
@@ -180,7 +177,7 @@ public class FoodISTActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.miCompose:
 
-                if (!logIn){
+                if (FirebaseAuth.getInstance().getCurrentUser() == null){
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setMessage("You need to create an Account and Log In to access this feature. Want to create one?")
                             .setCancelable(true)
