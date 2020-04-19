@@ -19,6 +19,16 @@
             android:padding="20dp">
 
             <EditText
+                android:id="@+id/Name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Name"
+                android:layout_marginTop="20dp"
+                android:inputType="text"
+                android:maxLines="1"
+                />
+
+            <EditText
                 android:id="@+id/create_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -36,6 +46,26 @@
                 android:inputType="textPassword"
                 android:maxLines="1"
                 />
+
+
+
+            <TextView
+                android:id="@+id/ustatus"
+                android:text="Unviersity Status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:maxLines="1"
+                android:textColor="@color/colorTecnicoDark"
+                android:textSize="18dp"
+                />
+
+            <Spinner
+                android:id="@+id/spinner1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/btn_dropdown"
+                android:spinnerMode="dropdown"/>
 
             <Button
                 android:id="@+id/create_acount_button"
