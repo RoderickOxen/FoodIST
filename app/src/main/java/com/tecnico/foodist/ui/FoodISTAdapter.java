@@ -54,7 +54,7 @@ public class FoodISTAdapter extends RecyclerView.Adapter<FoodISTAdapter.ViewHold
         holder.textView.setText(restaurants.get(position).getRestaurants_name());
         holder.textDistance.setText(restaurants.get(position).getRestaurants_time_distance().toString() + " walking");
 
-
+        //set restaruant profile picture
         switch(restaurants.get(position).getRestaurants_id()) {
             case "ae":
                 holder.imageView.setImageResource(R.drawable.ae);

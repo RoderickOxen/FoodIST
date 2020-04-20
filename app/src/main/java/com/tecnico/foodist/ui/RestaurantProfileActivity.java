@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.tecnico.foodist.R;
 
@@ -22,6 +23,11 @@ public class RestaurantProfileActivity extends AppCompatActivity   {
     private String rest_id;
     private double rest_location_lat;
     private double rest_location_lon;
+
+    TextView nameRest;
+    ImageView restProfile;
+
+    //TO DO RESTAURANTE SCHEDULE
 
 
     @Override
@@ -48,47 +54,52 @@ public class RestaurantProfileActivity extends AppCompatActivity   {
         });
 
         //init
-        inflateUserListFragment();
+        inflateMapFragment();
 
 
     }
 
     private void setImageView() {
-        ImageView myImageView = (ImageView)findViewById(R.id.imageDetail);
 
+        //set name
+        nameRest =  findViewById(R.id.textDetail);
+        nameRest.setText(rest_name);
+
+        //set profile image
+        restProfile = (ImageView)findViewById(R.id.imageDetail);
         switch(rest_id) {
             case "ae":
-                myImageView.setImageResource(R.drawable.ae);
+                restProfile.setImageResource(R.drawable.ae);
                 break;
             case "civil":
-                myImageView.setImageResource(R.drawable.civil);
+                restProfile.setImageResource(R.drawable.civil);
                 break;
             case "matematica":
-                myImageView.setImageResource(R.drawable.matematica);
+                restProfile.setImageResource(R.drawable.matematica);
                 break;
             case "mecanica":
-                myImageView.setImageResource(R.drawable.mecanica);
+                restProfile.setImageResource(R.drawable.mecanica);
                 break;
             case "central":
-                myImageView.setImageResource(R.drawable.central);
+                restProfile.setImageResource(R.drawable.central);
                 break;
             case "quimica":
-                myImageView.setImageResource(R.drawable.quimica);
+                restProfile.setImageResource(R.drawable.quimica);
                 break;
             case "amarelo":
-                myImageView.setImageResource(R.drawable.amarelo);
+                restProfile.setImageResource(R.drawable.amarelo);
                 break;
             case "maquinas":
-                myImageView.setImageResource(R.drawable.maquinas);
+                restProfile.setImageResource(R.drawable.maquinas);
                 break;
             case "redbar":
-                myImageView.setImageResource(R.drawable.redbar);
+                restProfile.setImageResource(R.drawable.redbar);
                 break;
             case "cantina":
-                myImageView.setImageResource(R.drawable.cantina);
+                restProfile.setImageResource(R.drawable.cantina);
                 break;
             default:
-                myImageView.setImageResource(R.drawable.buffet1600x800);
+                restProfile.setImageResource(R.drawable.buffet1600x800);
         }
     }
 
@@ -97,9 +108,7 @@ public class RestaurantProfileActivity extends AppCompatActivity   {
         startActivity(intent);
     }
 
-
-    //para apagar
-    private void inflateUserListFragment(){
+    private void inflateMapFragment(){
         hideSoftKeyboard();
 
         MapViewFragment fragment = MapViewFragment.newInstance(rest_location_lat, rest_location_lon, rest_name);

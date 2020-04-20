@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -39,6 +40,8 @@ import com.google.maps.model.Duration;
 import com.google.maps.model.LatLng;
 import com.google.maps.model.TravelMode;
 import com.tecnico.foodist.R;
+import com.tecnico.foodist.models.Dish;
+import com.tecnico.foodist.models.MenuIst;
 import com.tecnico.foodist.models.Restaurant;
 
 import java.io.IOException;
@@ -55,13 +58,6 @@ public class FoodISTActivity extends AppCompatActivity {
 
     //Restaurant
     private ArrayList<Restaurant> restaurants= new ArrayList<>();
-
-
-    private ArrayList<String> restaurants_name = new ArrayList<String>();
-    private ArrayList<String> restaurants_id = new ArrayList<String>();
-    private ArrayList<GeoPoint> restaurants_alameda_geoPoint = new ArrayList<GeoPoint>();
-    private ArrayList<GeoPoint> restaurants_tagus_geoPoint = new ArrayList<GeoPoint>();
-    private ArrayList<Duration> restaurants_time_distance = new ArrayList<Duration>();
 
     //Bundle extras
     private Boolean atAlameda;
@@ -124,12 +120,6 @@ public class FoodISTActivity extends AppCompatActivity {
                 adapter.clear();
                 restaurants.clear();
 
-                restaurants_name.clear();
-                restaurants_alameda_geoPoint.clear();
-                restaurants_tagus_geoPoint.clear();
-                restaurants_id.clear();
-                restaurants_time_distance.clear();
-
                 //fetch the current data from database
                 if (atAlameda){
                     getRestaurantsAlameda();
@@ -185,6 +175,7 @@ public class FoodISTActivity extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int id) {
                                     startActivity(new Intent(getApplicationContext(),LoginActivity.class));
                                     dialog.dismiss();
+                                    finish();
                                 }
                             })
                             .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -259,7 +250,7 @@ public class FoodISTActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()){
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        Restaurant restaurant = new Restaurant(null, null,null,null);
+                        Restaurant restaurant = new Restaurant();
 
                         //get restaurant name
                         String name = document.getString("Name");
@@ -281,10 +272,8 @@ public class FoodISTActivity extends AppCompatActivity {
 
                         restaurants.add(restaurant);
 
-
                     }
-                    firebasestorage();
-                    setRecyclerViewRestaurants();
+                    getMenus();
                 }
             }
         }).addOnFailureListener(e -> Log.w("Firebase", e));
@@ -300,7 +289,7 @@ public class FoodISTActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()){
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        Restaurant restaurant = new Restaurant(null, null,null,null);
+                        Restaurant restaurant = new Restaurant();
 
                         //get restaurant name
                         String name = document.getString("Name");
@@ -323,15 +312,13 @@ public class FoodISTActivity extends AppCompatActivity {
                         restaurants.add(restaurant);
 
                     }
-                    firebasestorage();
-                    setRecyclerViewRestaurants();
+                    getMenus();
                 }
 
             }
         }).addOnFailureListener(e -> Log.w("Firebase-Tagus", e));
 
     }
-
 
     public Duration getDuration(double lat, double lon){
         try {
@@ -353,6 +340,118 @@ public class FoodISTActivity extends AppCompatActivity {
         }
         return null;
     }
+
+
+    public void getMenus(){
+
+        String collection =  "restaurantsTagus";
+        if(atAlameda){
+            collection = "restaurants";
+        }
+        FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
+        Log.w("SIZE", String.valueOf(restaurants.size()));
+        for(Restaurant restaurant : restaurants){
+            CollectionReference restaurantsRef = rootRef.collection(collection).document(restaurant.getRestaurants_id()).collection("Menu");
+
+            restaurantsRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        MenuIst menu = new MenuIst();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+
+                            String name = document.getString("Name");
+                            Log.w("TESTE", name);
+                            Double price = document.getDouble("Price");
+                            Dish dish = new Dish(price,name);
+                            menu.addDish(dish);
+
+                        }
+                        restaurant.setMenu(menu);
+                    }
+                }
+            }).addOnFailureListener(e ->Log.w("Problem",e));
+
+        }
+        setRecyclerViewRestaurants();
+    }
+
+    public void setRecyclerViewRestaurants(){
+        recyclerView = findViewById(R.id.recyclerView);
+
+        if (atAlameda){
+            adapter = new FoodISTAdapter(this, image, queueTime, restaurants);
+        }
+        else{
+            adapter = new FoodISTAdapter(this, image, queueTime, restaurants);
+
+        }
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        fadeIn(toolbar);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //NOT IN USE
+
+
+    public void startProgress(double lat, double lon, String rest_id) {
+        // do something long
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                synchronized(this){
+                    try {
+                        DirectionsResult result = DirectionsApi.newRequest(geoApiContext)
+                                .mode(TravelMode.WALKING)
+                                .origin(new LatLng(userLatitude, userLongitude))
+                                .destination(new LatLng(lat, lon))
+                                .await();
+
+                        Log.w("DirectionsResult", String.valueOf(result.routes[0].legs[0].duration));
+                        for (Restaurant rest: restaurants){
+                            if (rest.getRestaurants_id().equals(rest_id)){
+                                rest.setRestaurants_time_distance(result.routes[0].legs[0].duration);
+                                break;
+                            }
+                        }
+
+                    } catch (ApiException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+        new Thread(runnable).start();
+    }
+
 
     public void firebasestorage(){
 
@@ -380,24 +479,6 @@ public class FoodISTActivity extends AppCompatActivity {
                 Log.w("storage",e);
             }
         });
-    }
-
-
-    public void setRecyclerViewRestaurants(){
-        firebasestorage();
-
-        recyclerView = findViewById(R.id.recyclerView);
-
-        if (atAlameda){
-            adapter = new FoodISTAdapter(this, image, queueTime, restaurants);
-        }
-        else{
-            adapter = new FoodISTAdapter(this, image, queueTime, restaurants);
-
-        }
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        fadeIn(toolbar);
     }
 
 }
