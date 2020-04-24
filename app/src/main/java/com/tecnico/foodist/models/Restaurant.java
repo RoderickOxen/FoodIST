@@ -11,6 +11,7 @@ public class Restaurant {
     private GeoPoint restaurants_geoPoint;
     private Duration restaurants_time_distance ;
     private MenuIst menu;
+    private String horario;
 
 
     public Restaurant() {
@@ -69,5 +70,13 @@ public class Restaurant {
 
     public MenuIst getMenu() {
         return menu;
+    }
+
+    public void setHorario(String horario) {
+        this.horario = horario;
+    }
+
+    public String getHorario() {
+        return horario;
     }
 }

@@ -251,7 +251,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startFoodIST();
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("We can't detect your current location. Please insert your campus.")
+            builder.setMessage("We can't detect your current Campus. Please insert your campus.")
                     .setCancelable(false)
                     .setPositiveButton("Alameda", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {

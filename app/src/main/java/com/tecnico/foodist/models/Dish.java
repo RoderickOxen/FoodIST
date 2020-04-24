@@ -1,6 +1,10 @@
 package com.tecnico.foodist.models;
 
-public class Dish {
+import java.io.Serializable;
+
+public class Dish implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     private double price;
     private String name;
     private String imageName; // ainda nao sei

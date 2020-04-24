@@ -265,6 +265,12 @@ public class FoodISTActivity extends AppCompatActivity {
                         //Calculate restaurant time to get there walking
                         restaurant.setRestaurants_time_distance(getDuration(geoPoint.getLatitude(),geoPoint.getLongitude()));
 
+                        String horario = document.getString("Horario");
+                        Log.w("Firebase-Horario", horario);
+                        restaurant.setHorario(horario);
+
+
+
                         //get restaurante id
                         String id = document.getString("r_id");
                         Log.w("Firebase-Id", id);
@@ -300,6 +306,12 @@ public class FoodISTActivity extends AppCompatActivity {
                         GeoPoint geoPoint = document.getGeoPoint("location");
                         Log.w("Firebase-location", String.valueOf(geoPoint));
                         restaurant.setRestaurants_geoPoint(geoPoint);
+
+                        String horario = document.getString("Horario");
+                        Log.w("Firebase-Horario", horario);
+                        restaurant.setHorario(horario);
+
+
 
                         //Calculate restaurant time to get there walking
                         restaurant.setRestaurants_time_distance(getDuration(geoPoint.getLatitude(),geoPoint.getLongitude()));

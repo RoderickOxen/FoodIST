@@ -2,28 +2,32 @@ package com.tecnico.foodist.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.tecnico.foodist.R;
+import com.tecnico.foodist.models.Dish;
+
+import java.util.ArrayList;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.tecnico.foodist.R;
 
 public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
 
-    String data1[];
     int images;
     Context context;
-    String distance;
     String queueTime;
+    ArrayList<Dish> menu ;
 
-    public MenuAdapter(Context ct, String s1[], int img, String dist , String queue){
+    public MenuAdapter(Context ct, ArrayList<Dish> dishes, int img , String queue){
         context = ct;
-        data1 = s1;
+        menu = dishes;
         images = img;
-        distance = dist;
         queueTime = queue;
     }
     @NonNull
@@ -37,10 +41,12 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.textView.setText(data1[position]);
+        Double temp = menu.get(position).getPrice();
+        Log.w("Adapter menu",menu.get(position).getName());
+        holder.textView.setText(menu.get(position).getName());
         holder.imageView.setImageResource(images);
         holder.textqueue.setText(queueTime);
-        holder.textDistance.setText(distance);
+        holder.textDistance.setText(temp.toString()+ " €");
 
         holder.theLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,7 +63,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return data1.length;
+        return menu.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

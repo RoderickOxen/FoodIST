@@ -2,6 +2,8 @@ package com.tecnico.foodist.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,10 +102,18 @@ public class FoodISTAdapter extends RecyclerView.Adapter<FoodISTAdapter.ViewHold
             public void onClick(View v) {
 
                 Intent intent = new Intent(context, RestaurantProfileActivity.class);
+
                 intent.putExtra("rest_names", restaurants.get(position).getRestaurants_name());
                 intent.putExtra("rest_id", restaurants.get(position).getRestaurants_id());
                 intent.putExtra("latitude", restaurants.get(position).getRestaurants_geoPoint().getLatitude());
                 intent.putExtra("longitude", restaurants.get(position).getRestaurants_geoPoint().getLongitude());
+                intent.putExtra("horario", restaurants.get(position).getHorario());
+                Bundle b = new Bundle();
+                b.putSerializable("serialzable",restaurants.get(position).getMenu().getDishes());
+                intent.putExtras(b);
+
+
+                Log.w("Inter-Horario", restaurants.get(position).getHorario());
 
                 context.startActivity(intent);
             }
