@@ -7,12 +7,24 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import pt.inesc.termite.wifidirect.SimWifiP2pBroadcast;
+import pt.inesc.termite.wifidirect.SimWifiP2pDevice;
+import pt.inesc.termite.wifidirect.SimWifiP2pDeviceList;
+import pt.inesc.termite.wifidirect.SimWifiP2pManager;
+import pt.inesc.termite.wifidirect.service.SimWifiP2pService;
+
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.Messenger;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,6 +55,8 @@ import com.tecnico.foodist.R;
 import com.tecnico.foodist.models.Dish;
 import com.tecnico.foodist.models.MenuIst;
 import com.tecnico.foodist.models.Restaurant;
+import com.tecnico.foodist.util.SimWifiP2pBroadcastReceiver;
+import com.tecnico.foodist.util.SimpWifip2pBroadCastReceiver;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,7 +64,7 @@ import java.util.ArrayList;
 
 
 
-public class FoodISTActivity extends AppCompatActivity {
+public class FoodISTActivity extends AppCompatActivity implements SimWifiP2pManager.PeerListListener {
 
     //recycler view elements
     private RecyclerView recyclerView;
@@ -75,6 +89,15 @@ public class FoodISTActivity extends AppCompatActivity {
     private Bitmap image; // = R.drawable.food900x700;
 
 
+    //Termite
+    public static final String TAG = "peerscanner";
+
+    private SimWifiP2pManager mManager = null;
+    private SimWifiP2pManager.Channel mChannel = null;
+    private boolean mBound = false;
+    private SimpWifip2pBroadCastReceiver mReceiver;
+
+
 
 
 
@@ -89,6 +112,31 @@ public class FoodISTActivity extends AppCompatActivity {
 
         //initiate the Google Directions API with he apiKey so we can calculate the durantion travel
         geoApiContext = new GeoApiContext.Builder().apiKey("AIzaSyBKj_1qFGu2CzxY18nYR-Zb-rxU-Xjhv2Y").build();
+
+
+        // Termite - register broadcast receiver
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(SimWifiP2pBroadcast.WIFI_P2P_STATE_CHANGED_ACTION);
+        filter.addAction(SimWifiP2pBroadcast.WIFI_P2P_PEERS_CHANGED_ACTION);
+        filter.addAction(SimWifiP2pBroadcast.WIFI_P2P_NETWORK_MEMBERSHIP_CHANGED_ACTION);
+        filter.addAction(SimWifiP2pBroadcast.WIFI_P2P_GROUP_OWNERSHIP_CHANGED_ACTION);
+        mReceiver = new SimpWifip2pBroadCastReceiver(this);
+        registerReceiver(mReceiver, filter);
+
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setMessage("Information: This App uses Wifi Direct.")
+                .setCancelable(false)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent intent = new Intent(FoodISTActivity.this, SimWifiP2pService.class);
+                        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+                        mBound = true;
+                    }
+                });
+        androidx.appcompat.app.AlertDialog alert = builder.create();
+        alert.show();
+
+
 
         //set toolbar
         toolbar = findViewById(R.id.toolbar);
@@ -263,7 +311,7 @@ public class FoodISTActivity extends AppCompatActivity {
                         restaurant.setRestaurants_geoPoint(geoPoint);
 
                         //Calculate restaurant time to get there walking
-                        restaurant.setRestaurants_time_distance(getDuration(geoPoint.getLatitude(),geoPoint.getLongitude()));
+                        //restaurant.setRestaurants_time_distance(getDuration(geoPoint.getLatitude(),geoPoint.getLongitude()));
 
                         String horario = document.getString("Horario");
                         Log.w("Firebase-Horario", horario);
@@ -314,7 +362,7 @@ public class FoodISTActivity extends AppCompatActivity {
 
 
                         //Calculate restaurant time to get there walking
-                        restaurant.setRestaurants_time_distance(getDuration(geoPoint.getLatitude(),geoPoint.getLongitude()));
+                        //restaurant.setRestaurants_time_distance(getDuration(geoPoint.getLatitude(),geoPoint.getLongitude()));
 
                         //get restaurante id
                         String id = document.getString("r_id");
@@ -404,6 +452,56 @@ public class FoodISTActivity extends AppCompatActivity {
     }
 
 
+    //Termite
+    @Override
+    public void onPeersAvailable(SimWifiP2pDeviceList peers) {
+
+        StringBuilder peersStr = new StringBuilder();
+
+        // compile list of devices in range
+        for (SimWifiP2pDevice device : peers.getDeviceList()) {
+            String devstr = "" + device.deviceName + " (" + device.getVirtIp() + ")\n";
+            peersStr.append(devstr);
+        }
+
+        // display list of devices in range
+        new android.app.AlertDialog.Builder(this)
+                .setTitle("Devices in WiFi Range")
+                .setMessage(peersStr.toString())
+                .setNeutralButton("Dismiss", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .show();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterReceiver(mReceiver);
+    }
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+        // callbacks for service binding, passed to bindService()
+
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            mManager = new SimWifiP2pManager(new Messenger(service));
+            mChannel = mManager.initialize(getApplication(), getMainLooper(), null);
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mManager = null;
+            mChannel = null;
+            mBound = false;
+        }
+    };
+
+
+
+
 
 
 
@@ -428,42 +526,6 @@ public class FoodISTActivity extends AppCompatActivity {
 
 
     //NOT IN USE
-
-
-    public void startProgress(double lat, double lon, String rest_id) {
-        // do something long
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                synchronized(this){
-                    try {
-                        DirectionsResult result = DirectionsApi.newRequest(geoApiContext)
-                                .mode(TravelMode.WALKING)
-                                .origin(new LatLng(userLatitude, userLongitude))
-                                .destination(new LatLng(lat, lon))
-                                .await();
-
-                        Log.w("DirectionsResult", String.valueOf(result.routes[0].legs[0].duration));
-                        for (Restaurant rest: restaurants){
-                            if (rest.getRestaurants_id().equals(rest_id)){
-                                rest.setRestaurants_time_distance(result.routes[0].legs[0].duration);
-                                break;
-                            }
-                        }
-
-                    } catch (ApiException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        };
-        new Thread(runnable).start();
-    }
-
 
     public void firebasestorage(){
 
@@ -492,5 +554,6 @@ public class FoodISTActivity extends AppCompatActivity {
             }
         });
     }
+
 
 }

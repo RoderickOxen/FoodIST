@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.ProfileActivity"
+    android:background="@color/colorTecnicoLight">
+
+    <Button
+        android:id="@+id/idWifiOnButton"
+        android:layout_width="196dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="96dp"
+        android:text="Wifi On"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/idWifiOffButton"
+        android:layout_width="196dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="124dp"
+        android:text="Wifi Off"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/idWifiOnButton" />
+
+    <Button
+        android:id="@+id/idInRangeButton"
+        android:layout_width="194dp"
+        android:layout_height="53dp"
+        android:text="In Range"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/idWifiOffButton"
+        app:layout_constraintVertical_bias="0.207" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

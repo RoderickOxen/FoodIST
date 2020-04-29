@@ -6,6 +6,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import pt.inesc.termite.wifidirect.SimWifiP2pBroadcast;
+
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -28,6 +30,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.maps.android.PolyUtil;
 import com.tecnico.foodist.models.User;
 import com.tecnico.foodist.ui.FoodISTActivity;
+
 
 import java.util.ArrayList;
 import java.util.List;
