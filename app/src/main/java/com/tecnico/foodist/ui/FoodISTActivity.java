@@ -37,6 +37,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
@@ -57,6 +58,7 @@ import com.tecnico.foodist.models.MenuIst;
 import com.tecnico.foodist.models.Restaurant;
 import com.tecnico.foodist.util.SimWifiP2pBroadcastReceiver;
 import com.tecnico.foodist.util.SimpWifip2pBroadCastReceiver;
+import com.tecnico.foodist.util.TCPClient;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -461,10 +463,12 @@ public class FoodISTActivity extends AppCompatActivity implements SimWifiP2pMana
     public void onPeersAvailable(SimWifiP2pDeviceList peers) {
 
         StringBuilder peersStr = new StringBuilder();
+        String beaconName="none";
 
         // compile list of devices in range
         for (SimWifiP2pDevice device : peers.getDeviceList()) {
             String devstr = "" + device.deviceName + " (" + device.getVirtIp() + ")\n";
+            beaconName = device.deviceName;
             peersStr.append(devstr);
         }
 
@@ -477,6 +481,19 @@ public class FoodISTActivity extends AppCompatActivity implements SimWifiP2pMana
                     }
                 })
                 .show();
+
+        //If user has a loggin done then it register that the current user is now ate the restaurant
+        if (FirebaseAuth.getInstance().getCurrentUser() != null){
+
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            String tcpMessage = "ARU"+"-"+user.getUid()+"-"+beaconName;
+            TCPClient tcpClient = new TCPClient(getApplicationContext(), tcpMessage);
+            tcpClient.execute();
+
+        }
+
+
+
     }
 
     @Override

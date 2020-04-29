@@ -15,6 +15,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.tecnico.foodist.MainActivity;
 import com.tecnico.foodist.R;
+import com.tecnico.foodist.util.TCPClient;
+import com.tecnico.foodist.util.TCPMessage;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -58,6 +60,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         dialog = new ProgressDialog(this);
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         dialog.setMessage("Please wait.");
+
+
+        String tcpMessage = "Hello Server";
+        TCPClient tcpClient = new TCPClient(getApplicationContext(), tcpMessage);
+        tcpClient.execute();
 
 
     }
