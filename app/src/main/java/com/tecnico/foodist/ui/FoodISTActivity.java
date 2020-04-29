@@ -91,11 +91,12 @@ public class FoodISTActivity extends AppCompatActivity implements SimWifiP2pMana
 
     //Termite
     public static final String TAG = "peerscanner";
-
     private SimWifiP2pManager mManager = null;
     private SimWifiP2pManager.Channel mChannel = null;
     private boolean mBound = false;
     private SimpWifip2pBroadCastReceiver mReceiver;
+    private static FoodISTActivity ins;
+
 
 
 
@@ -180,6 +181,9 @@ public class FoodISTActivity extends AppCompatActivity implements SimWifiP2pMana
 
             }
         });
+
+        ins = this;
+
 
 
     }
@@ -451,7 +455,7 @@ public class FoodISTActivity extends AppCompatActivity implements SimWifiP2pMana
         fadeIn(toolbar);
     }
 
-
+    //----------------------------------------------
     //Termite
     @Override
     public void onPeersAvailable(SimWifiP2pDeviceList peers) {
@@ -481,6 +485,32 @@ public class FoodISTActivity extends AppCompatActivity implements SimWifiP2pMana
         unregisterReceiver(mReceiver);
     }
 
+    @Override
+    protected void onResume() {
+        mReceiver = new SimpWifip2pBroadCastReceiver(this);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(SimWifiP2pBroadcast.WIFI_P2P_STATE_CHANGED_ACTION);
+        filter.addAction(SimWifiP2pBroadcast.WIFI_P2P_PEERS_CHANGED_ACTION);
+        filter.addAction(SimWifiP2pBroadcast.WIFI_P2P_NETWORK_MEMBERSHIP_CHANGED_ACTION);
+        filter.addAction(SimWifiP2pBroadcast.WIFI_P2P_GROUP_OWNERSHIP_CHANGED_ACTION);
+        mReceiver = new SimpWifip2pBroadCastReceiver(this);
+        registerReceiver(mReceiver, filter);
+
+        super.onResume();
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setMessage("Information: This App uses Wifi Direct.")
+                .setCancelable(false)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent intent = new Intent(FoodISTActivity.this, SimWifiP2pService.class);
+                        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+                        mBound = true;
+                    }
+                });
+        androidx.appcompat.app.AlertDialog alert = builder.create();
+        alert.show();
+    }
+
     private ServiceConnection mConnection = new ServiceConnection() {
         // callbacks for service binding, passed to bindService()
 
@@ -489,6 +519,7 @@ public class FoodISTActivity extends AppCompatActivity implements SimWifiP2pMana
             mManager = new SimWifiP2pManager(new Messenger(service));
             mChannel = mManager.initialize(getApplication(), getMainLooper(), null);
             mBound = true;
+
         }
 
         @Override
@@ -498,6 +529,19 @@ public class FoodISTActivity extends AppCompatActivity implements SimWifiP2pMana
             mBound = false;
         }
     };
+
+    public static FoodISTActivity  getInstace(){
+        return ins;
+    }
+
+
+    public void contactSV(final String t) {
+        FoodISTActivity.this.runOnUiThread(new Runnable() {
+            public void run() {
+                mManager.requestPeers(mChannel, FoodISTActivity.this);
+            }
+        });
+    }
 
 
 

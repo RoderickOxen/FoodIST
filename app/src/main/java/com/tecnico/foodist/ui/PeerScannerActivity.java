@@ -52,20 +52,6 @@ public class PeerScannerActivity extends Activity implements SimWifiP2pManager.P
         mReceiver = new SimWifiP2pBroadcastReceiver(this);
         registerReceiver(mReceiver, filter);
 
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
-        builder.setMessage("Information: This App uses Wifi Direct.")
-                .setCancelable(false)
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        Intent intent = new Intent(PeerScannerActivity.this, SimWifiP2pService.class);
-                        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-                        mBound = true;
-                        guiUpdateDisconnectedState();
-                    }
-                });
-        androidx.appcompat.app.AlertDialog alert = builder.create();
-        alert.show();
-
     }
 
     @Override
@@ -78,7 +64,6 @@ public class PeerScannerActivity extends Activity implements SimWifiP2pManager.P
      * Listeners associated to buttons
      */
 
-    /*
     private View.OnClickListener listenerWifiOnButton = new View.OnClickListener() {
         public void onClick(View v){
             Intent intent = new Intent(v.getContext(), SimWifiP2pService.class);
@@ -87,7 +72,6 @@ public class PeerScannerActivity extends Activity implements SimWifiP2pManager.P
             guiUpdateDisconnectedState();
         }
     };
-     */
 
     private View.OnClickListener listenerWifiOffButton = new View.OnClickListener() {
         public void onClick(View v){
@@ -159,7 +143,7 @@ public class PeerScannerActivity extends Activity implements SimWifiP2pManager.P
 
     private void guiSetButtonListeners() {
 
-        //findViewById(R.id.idWifiOnButton).setOnClickListener(listenerWifiOnButton);
+        findViewById(R.id.idWifiOnButton).setOnClickListener(listenerWifiOnButton);
         findViewById(R.id.idWifiOffButton).setOnClickListener(listenerWifiOffButton);
         findViewById(R.id.idInRangeButton).setOnClickListener(listenerInRangeButton);
     }

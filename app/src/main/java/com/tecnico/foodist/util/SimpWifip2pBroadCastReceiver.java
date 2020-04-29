@@ -41,10 +41,15 @@ public class SimpWifip2pBroadCastReceiver extends BroadcastReceiver{
 
             // Request available peers from the wifi p2p manager. This is an
             // asynchronous call and the calling activity is notified with a
+
             // callback on PeerListListener.onPeersAvailable()
 
             Toast.makeText(mActivity, "Peer list changed",
                     Toast.LENGTH_SHORT).show();
+            try {
+                FoodISTActivity.getInstace().contactSV("String");
+            } catch (Exception e) {}
+
 
         } else if (SimWifiP2pBroadcast.WIFI_P2P_NETWORK_MEMBERSHIP_CHANGED_ACTION.equals(action)) {
 

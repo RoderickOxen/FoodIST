@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+import com.tecnico.foodist.ui.FoodISTActivity;
 import com.tecnico.foodist.ui.PeerScannerActivity;
 
 import pt.inesc.termite.wifidirect.SimWifiP2pBroadcast;
@@ -45,6 +46,7 @@ public class SimWifiP2pBroadcastReceiver extends BroadcastReceiver{
 
             Toast.makeText(mActivity, "Peer list changed",
                     Toast.LENGTH_SHORT).show();
+
 
         } else if (SimWifiP2pBroadcast.WIFI_P2P_NETWORK_MEMBERSHIP_CHANGED_ACTION.equals(action)) {
 
