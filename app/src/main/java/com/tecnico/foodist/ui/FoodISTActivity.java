@@ -315,7 +315,7 @@ public class FoodISTActivity extends AppCompatActivity implements SimWifiP2pMana
                         restaurant.setRestaurants_geoPoint(geoPoint);
 
                         //Calculate restaurant time to get there walking
-                        //restaurant.setRestaurants_time_distance(getDuration(geoPoint.getLatitude(),geoPoint.getLongitude()));
+                        restaurant.setRestaurants_time_distance(getDuration(geoPoint.getLatitude(),geoPoint.getLongitude()));
 
                         String horario = document.getString("Horario");
                         Log.w("Firebase-Horario", horario);
@@ -366,7 +366,7 @@ public class FoodISTActivity extends AppCompatActivity implements SimWifiP2pMana
 
 
                         //Calculate restaurant time to get there walking
-                        //restaurant.setRestaurants_time_distance(getDuration(geoPoint.getLatitude(),geoPoint.getLongitude()));
+                        restaurant.setRestaurants_time_distance(getDuration(geoPoint.getLatitude(),geoPoint.getLongitude()));
 
                         //get restaurante id
                         String id = document.getString("r_id");
@@ -388,7 +388,7 @@ public class FoodISTActivity extends AppCompatActivity implements SimWifiP2pMana
         try {
             DirectionsResult result = DirectionsApi.newRequest(geoApiContext)
                     .mode(TravelMode.WALKING)
-                    .origin(new LatLng(userLatitude, userLongitude))
+                    .origin(new LatLng(38.736987, -9.138705))
                     .destination(new LatLng(lat, lon))
                     .await();
 

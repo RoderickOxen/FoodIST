@@ -1,7 +1,11 @@
 package com.tecnico.foodist.ui;
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,12 +13,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.maps.DirectionsApi;
+import com.google.maps.GeoApiContext;
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.DirectionsResult;
+import com.google.maps.model.Duration;
+import com.google.maps.model.LatLng;
+import com.google.maps.model.TravelMode;
 import com.tecnico.foodist.R;
 import com.tecnico.foodist.models.Restaurant;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -32,6 +46,8 @@ public class FoodISTAdapter extends RecyclerView.Adapter<FoodISTAdapter.ViewHold
     Bitmap images;
     Context context;
     String queueTime;
+    GeoApiContext geoApiContext;
+
 
 
     public FoodISTAdapter(Context ct, Bitmap img, String queue, ArrayList<Restaurant> r){
@@ -41,6 +57,8 @@ public class FoodISTAdapter extends RecyclerView.Adapter<FoodISTAdapter.ViewHold
         //TO DOO
         images = img;
         queueTime = queue;
+        geoApiContext = new GeoApiContext.Builder().apiKey("AIzaSyBKj_1qFGu2CzxY18nYR-Zb-rxU-Xjhv2Y").build();
+
     }
     @NonNull
     @Override
@@ -54,7 +72,7 @@ public class FoodISTAdapter extends RecyclerView.Adapter<FoodISTAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         holder.textView.setText(restaurants.get(position).getRestaurants_name());
-        //holder.textDistance.setText(restaurants.get(position).getRestaurants_time_distance().toString() + " walking");
+        holder.textDistance.setText(restaurants.get(position).getRestaurants_time_distance().toString()+" walking");
 
         //set restaruant profile picture
         switch(restaurants.get(position).getRestaurants_id()) {
@@ -146,4 +164,5 @@ public class FoodISTAdapter extends RecyclerView.Adapter<FoodISTAdapter.ViewHold
         restaurants.clear();
         notifyDataSetChanged();
     }
+
 }
