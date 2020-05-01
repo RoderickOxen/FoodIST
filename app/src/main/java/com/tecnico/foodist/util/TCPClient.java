@@ -3,8 +3,14 @@ package com.tecnico.foodist.util;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -36,12 +42,32 @@ public class TCPClient extends AsyncTask<String, Void, Void> {
         try {
 
             socket = new Socket(host, portNumber);
-            printWriter = new PrintWriter(socket.getOutputStream());
-            printWriter.write(message);
-            printWriter.flush();
-            printWriter.close();
+            String[] convertedMessage = message.split("-");
+            String operation = convertedMessage[0];
 
+            DataOutputStream dataOutputStream =
+                    new DataOutputStream(socket.getOutputStream());
+            DataInputStream dataInputStream =
+                    new DataInputStream(socket.getInputStream());
+            switch (operation) {
+                case "ARU":
+                    dataOutputStream.writeUTF(message);
+                    dataOutputStream.close();
+                    break;
 
+                case "LR":
+                    //asks for queue time
+                    dataOutputStream.writeUTF(message);
+
+                    //wait for response
+                    String response = dataInputStream.readUTF();
+
+                    Log.w("response",response);
+
+                    dataOutputStream.close();
+                    dataInputStream.close();
+                    break;
+            }
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -62,8 +62,8 @@ import com.tecnico.foodist.util.TCPClient;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
-
+import java.util.Calendar;
+import java.util.Date;
 
 
 public class FoodISTActivity extends AppCompatActivity implements SimWifiP2pManager.PeerListListener {
@@ -485,15 +485,13 @@ public class FoodISTActivity extends AppCompatActivity implements SimWifiP2pMana
         //If user has a loggin done then it register that the current user is now ate the restaurant
         if (FirebaseAuth.getInstance().getCurrentUser() != null){
 
+            String currentDateTimeString = java.text.DateFormat.getDateTimeInstance().format(new Date());
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            String tcpMessage = "ARU"+"-"+user.getUid()+"-"+beaconName;
+            String tcpMessage = "ARU"+"-"+user.getUid()+"-"+beaconName+"-"+currentDateTimeString;
             TCPClient tcpClient = new TCPClient(getApplicationContext(), tcpMessage);
             tcpClient.execute();
 
         }
-
-
-
     }
 
     @Override
