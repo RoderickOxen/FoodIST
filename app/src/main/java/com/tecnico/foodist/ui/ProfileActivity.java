@@ -36,7 +36,11 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_profile);
 
         Button logoutButton = findViewById(R.id.logoutButton);
+        Button editProfile = findViewById(R.id.editProfile);
+
         logoutButton.setOnClickListener(ProfileActivity.this);
+        editProfile.setOnClickListener(ProfileActivity.this);
+
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -72,6 +76,11 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
                 FirebaseAuth.getInstance().signOut();
                 Toast.makeText(ProfileActivity.this, "Sign out successful", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.editProfile:{
+                Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
                 startActivity(intent);
                 break;
             }

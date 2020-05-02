@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         dialog.setMessage("Please wait.");
 
 
-        String tcpMessage = "LR-b";
+        String tcpMessage = "LRALL";
         TCPClient tcpClient = new TCPClient(getApplicationContext(), tcpMessage);
         tcpClient.execute();
 

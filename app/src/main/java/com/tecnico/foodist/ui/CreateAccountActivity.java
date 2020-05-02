@@ -130,8 +130,6 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
 
         Log.w("email", email);
 
-        //TO DO VERIFICAR SE O EMAIL EXISTE OU NAO
-
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -172,7 +170,6 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                         }
                     }
                 });
-
     }
 
 }

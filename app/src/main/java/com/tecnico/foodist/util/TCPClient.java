@@ -16,6 +16,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+@SuppressWarnings("DuplicateBranchesInSwitch")
 public class TCPClient extends AsyncTask<String, Void, Void> {
 
     //Client has server socket
@@ -63,6 +64,19 @@ public class TCPClient extends AsyncTask<String, Void, Void> {
                     String response = dataInputStream.readUTF();
 
                     Log.w("response",response);
+
+                    dataOutputStream.close();
+                    dataInputStream.close();
+                    break;
+
+                case "LRALL":
+                    //asks for queue time
+                    dataOutputStream.writeUTF(message);
+
+                    //wait for response
+                    String resp = dataInputStream.readUTF();
+
+                    Log.w("response",resp);
 
                     dataOutputStream.close();
                     dataInputStream.close();

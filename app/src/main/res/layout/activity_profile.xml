@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.ProfileActivity"
-    android:background="@color/colorTecnicoLight">
+    android:background="@color/blueTec1">
 
     <ImageView
         android:id="@+id/imageView"
@@ -23,9 +23,9 @@
         android:id="@+id/name"
         android:layout_width="290dp"
         android:layout_height="67dp"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/colorTecnicoLight"
         android:text="Email"
-        android:textColor="@color/colorTecnicoLight"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -37,9 +37,9 @@
         android:id="@+id/email"
         android:layout_width="290dp"
         android:layout_height="67dp"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/colorTecnicoLight"
         android:text="Email"
-        android:textColor="@color/colorTecnicoLight"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
@@ -50,9 +50,9 @@
         android:id="@+id/status"
         android:layout_width="290dp"
         android:layout_height="67dp"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/colorTecnicoLight"
         android:text="Email"
-        android:textColor="@color/colorTecnicoLight"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
@@ -69,16 +69,30 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/status"
-        app:layout_constraintVertical_bias="0.299" />
+        app:layout_constraintVertical_bias="0.806" />
 
     <Button
-        android:id="@+id/logoutButton2"
+        android:id="@+id/editProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Wifi Direct"
+        android:text="Edit Profile"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logoutButton" />
+        app:layout_constraintTop_toBottomOf="@+id/status"
+        app:layout_constraintVertical_bias="0.127" />
+
+    <Button
+        android:id="@+id/dietryConstraints"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit\nDietary Constraints"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/status"
+        app:layout_constraintVertical_bias="0.431" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

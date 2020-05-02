@@ -323,13 +323,10 @@ public class FoodISTActivity extends AppCompatActivity implements SimWifiP2pMana
                         Log.w("Firebase-Horario", horario);
                         restaurant.setHorario(horario);
 
-
-
                         //get restaurante id
                         String id = document.getString("r_id");
                         Log.w("Firebase-Id", id);
                         restaurant.setRestaurants_id(id);
-
                         restaurants.add(restaurant);
 
                     }
@@ -457,7 +454,7 @@ public class FoodISTActivity extends AppCompatActivity implements SimWifiP2pMana
         fadeIn(toolbar);
     }
 
-    //----------------------------------------------
+    //-------------------------------------------------------------------------------------------
     //Termite
     @Override
     public void onPeersAvailable(SimWifiP2pDeviceList peers) {
@@ -558,61 +555,7 @@ public class FoodISTActivity extends AppCompatActivity implements SimWifiP2pMana
         });
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //NOT IN USE
-
-    public void firebasestorage(){
-
-        //get the Firebase  storage reference
-        storage = FirebaseStorage.getInstance();
-
-        StorageReference imgReference = storage.getReference()
-                .child("restaurantsProfilesPictures")  //image folder
-                .child("gnochi700x636.jpg");
-        //"gnochi700x636.jpg"
-        //"food900x700.jpg"
-
-        //download files as bytes
-        final long ONE_MEGABYTE = 1024 * 1024;
-        imgReference.getBytes(ONE_MEGABYTE)
-                .addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                    @Override
-                    public void onSuccess(byte[] bytes) {
-                        image = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                        Log.w("storage","aqui");
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w("storage",e);
-            }
-        });
-    }
+    //-------------------------------------------------------------------------------------------
 
 
 }
