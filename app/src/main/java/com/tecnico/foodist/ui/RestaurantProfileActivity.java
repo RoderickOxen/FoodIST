@@ -24,12 +24,14 @@ public class RestaurantProfileActivity extends AppCompatActivity   {
     private ArrayList<String> mProperties = new ArrayList<>();
     private String rest_name;
     private String rest_id;
+    private String queue;
     private double rest_location_lat;
     private double rest_location_lon;
     private String horario;
     private ArrayList<Dish> menu;
 
     TextView nameRest;
+    TextView queueTime;
     ImageView restProfile;
     TextView horarioRes;
 
@@ -41,12 +43,15 @@ public class RestaurantProfileActivity extends AppCompatActivity   {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_profile);
 
+
+
         //get restaurant properties
         Bundle bundle = getIntent().getExtras();
         rest_name = bundle.getString("rest_names");
         rest_id =  bundle.getString("rest_id");
         rest_location_lat = bundle.getDouble("latitude");
         rest_location_lon = bundle.getDouble("longitude");
+        queue = bundle.getString("queue");
         horario = bundle.getString("horario");
         Log.w("Horario", horario);
 
@@ -78,8 +83,11 @@ public class RestaurantProfileActivity extends AppCompatActivity   {
         //set name
         horarioRes = findViewById(R.id.horarioProfile);
         nameRest =  findViewById(R.id.textDetail);
+        queueTime =  findViewById(R.id.queuetime);
+
         nameRest.setText(rest_name);
-        horarioRes.setText(horario);
+        horarioRes.setText("Schedule: "+horario);
+        queueTime.setText("Queue: "+queue);
 
         //set profile image
         restProfile = (ImageView)findViewById(R.id.imageDetail);

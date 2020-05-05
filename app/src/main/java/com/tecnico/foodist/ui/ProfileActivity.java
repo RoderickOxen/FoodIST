@@ -29,6 +29,8 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
     private FirebaseUser user;
     TextView name;
     TextView status;
+    TextView dc;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,19 +39,20 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
 
         Button logoutButton = findViewById(R.id.logoutButton);
         Button editProfile = findViewById(R.id.editProfile);
+        Button dietryConstraints = findViewById(R.id.dietryConstraints);
+
 
         logoutButton.setOnClickListener(ProfileActivity.this);
         editProfile.setOnClickListener(ProfileActivity.this);
+        dietryConstraints.setOnClickListener(ProfileActivity.this);
 
 
         user = FirebaseAuth.getInstance().getCurrentUser();
-
         TextView email = (TextView)findViewById(R.id.email);
         name = (TextView)findViewById(R.id.name);
         status = (TextView)findViewById(R.id.status);
-
+        dc = (TextView)findViewById(R.id.status2);
         email.setText(user.getEmail());
-
         getUserProperties();
 
 
@@ -64,6 +67,14 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 name.setText(documentSnapshot.getString("Name"));
                 status.setText(documentSnapshot.getString("UniversityStatus"));
+
+                String temp = documentSnapshot.getString("DC");
+                StringBuilder stringBuffer = new StringBuilder();
+                String temp1[] = temp.split("-");
+                for (int i=0;i<temp1.length;i++){
+                    stringBuffer.append(temp1[i]+" ");
+                }
+                dc.setText(stringBuffer.toString());
             }
         });
 
@@ -81,6 +92,11 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
             }
             case R.id.editProfile:{
                 Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.dietryConstraints:{
+                Intent intent = new Intent(ProfileActivity.this, DietryConstraintActivity.class);
                 startActivity(intent);
                 break;
             }

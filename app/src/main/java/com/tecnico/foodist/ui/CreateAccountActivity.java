@@ -146,6 +146,8 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                             user.put("Name", name.getText().toString());
                             user.put("Email", email);
                             user.put("UniversityStatus", status.toString());
+                            user.put("DC", "fish meat vegan vegetarian");
+
 
                             documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override

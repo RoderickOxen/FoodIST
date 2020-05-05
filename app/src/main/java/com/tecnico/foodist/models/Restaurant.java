@@ -12,6 +12,7 @@ public class Restaurant {
     private Duration restaurants_time_distance ;
     private MenuIst menu;
     private String horario;
+    private String queue;
 
 
     public Restaurant() {
@@ -73,10 +74,21 @@ public class Restaurant {
     }
 
     public void setHorario(String horario) {
+
         this.horario = horario;
     }
 
     public String getHorario() {
+
         return horario;
     }
+
+    public String getQueue() {
+        return queue;
+    }
+
+    public void setQueue(String queue) {
+        this.queue = queue;
+    }
+
 }

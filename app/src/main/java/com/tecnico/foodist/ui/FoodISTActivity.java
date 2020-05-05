@@ -12,6 +12,8 @@ import pt.inesc.termite.wifidirect.SimWifiP2pDevice;
 import pt.inesc.termite.wifidirect.SimWifiP2pDeviceList;
 import pt.inesc.termite.wifidirect.SimWifiP2pManager;
 import pt.inesc.termite.wifidirect.service.SimWifiP2pService;
+import androidx.collection.LruCache;
+
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -100,10 +102,6 @@ public class FoodISTActivity extends AppCompatActivity implements SimWifiP2pMana
     private static FoodISTActivity ins;
 
 
-
-
-
-
     //For calculating the duration
     GeoApiContext geoApiContext;
 
@@ -186,6 +184,17 @@ public class FoodISTActivity extends AppCompatActivity implements SimWifiP2pMana
 
         ins = this;
 
+        //set Cache
+        int cacheSize = 100 * 1024 * 1024; // 100MB
+        LruCache<String, Bitmap> mCache = new LruCache<String, Bitmap>(cacheSize){
+            @Override
+            protected int sizeOf(@NonNull String key, @NonNull Bitmap value) {
+                return value.getByteCount();
+            }
+        };
+
+        GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+        globalVariable.setmCache(mCache);
 
 
     }
@@ -295,6 +304,11 @@ public class FoodISTActivity extends AppCompatActivity implements SimWifiP2pMana
     }
 
     public void getRestaurantsAlameda(){
+        String tcpMessage = "LRALL";
+        TCPClient tcpClient = new TCPClient(getApplicationContext(), tcpMessage);
+        tcpClient.execute();
+
+
         FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
         CollectionReference restaurantsRef = rootRef.collection("restaurants");
 
@@ -331,6 +345,8 @@ public class FoodISTActivity extends AppCompatActivity implements SimWifiP2pMana
 
                     }
                     getMenus();
+                    addQueues("a");
+
                 }
             }
         }).addOnFailureListener(e -> Log.w("Firebase", e));
@@ -338,6 +354,11 @@ public class FoodISTActivity extends AppCompatActivity implements SimWifiP2pMana
     }
 
     private void getRestaurantsTagusPark() {
+        String tcpMessage = "LRALL";
+        TCPClient tcpClient = new TCPClient(getApplicationContext(), tcpMessage);
+        tcpClient.execute();
+
+
         FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
         CollectionReference restaurantsRef = rootRef.collection("restaurantsTagus");
 
@@ -375,7 +396,22 @@ public class FoodISTActivity extends AppCompatActivity implements SimWifiP2pMana
                         restaurants.add(restaurant);
 
                     }
+
+                    //add Queues
+                    GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+                    String restQueues[] = globalVariable.getAllQueueTimeTagus().split(" ");
+
+                    for(String rest: restQueues){
+                        String[] nameTime = rest.split("-");
+                        for(Restaurant restaurant: restaurants){
+                            if (nameTime[0].equals(restaurant.getRestaurants_id())){
+                                restaurant.setQueue(nameTime[1]);
+                            }
+                        }
+                    }
+
                     getMenus();
+                    addQueues("t");
                 }
 
             }
@@ -384,6 +420,7 @@ public class FoodISTActivity extends AppCompatActivity implements SimWifiP2pMana
     }
 
     public Duration getDuration(double lat, double lon){
+
         try {
             DirectionsResult result = DirectionsApi.newRequest(geoApiContext)
                     .mode(TravelMode.WALKING)
@@ -424,10 +461,15 @@ public class FoodISTActivity extends AppCompatActivity implements SimWifiP2pMana
                         for (QueryDocumentSnapshot document : task.getResult()) {
 
                             String name = document.getString("Name");
-                            Log.w("TESTE", name);
                             Double price = document.getDouble("Price");
-                            Dish dish = new Dish(price,name);
+                            ArrayList<String> photos = (ArrayList<String>) document.get("Photos");
+                            String doc = document.getId();
+                            Dish dish = new Dish(price,name,photos,doc);
+                            //Log.w("TESTE", photos.get(0));
                             menu.addDish(dish);
+                            GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+                            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ae);
+                            globalVariable.setBitmapCache(name, bitmap);
 
                         }
                         restaurant.setMenu(menu);
@@ -440,6 +482,11 @@ public class FoodISTActivity extends AppCompatActivity implements SimWifiP2pMana
     }
 
     public void setRecyclerViewRestaurants(){
+        // Global Class
+        GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+        globalVariable.setAtAlameda(atAlameda);
+        globalVariable.setRestaurants(restaurants);
+
         recyclerView = findViewById(R.id.recyclerView);
 
         if (atAlameda){
@@ -452,6 +499,7 @@ public class FoodISTActivity extends AppCompatActivity implements SimWifiP2pMana
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         fadeIn(toolbar);
+
     }
 
     //-------------------------------------------------------------------------------------------
@@ -557,5 +605,42 @@ public class FoodISTActivity extends AppCompatActivity implements SimWifiP2pMana
 
     //-------------------------------------------------------------------------------------------
 
+    public void addQueues(String campus){
+
+        if(campus.equals("a")){
+            GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+
+            String restQueues[] = globalVariable.getAllQueueTime().split("!")[0].split(" ");
+
+            for(String rest: restQueues){
+                String[] nameTime = rest.split("-");
+                for(Restaurant restaurant: restaurants){
+                    if (nameTime[0].equals(restaurant.getRestaurants_id())){
+                        restaurant.setQueue(nameTime[1]);
+                    }
+                }
+            }
+        }
+
+        if(campus.equals("t")){
+            GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+
+            String restQueues[] = globalVariable.getAllQueueTime().split("!")[1].split(" ");
+
+            Log.w("aquiaqui",globalVariable.getAllQueueTime().split("!")[1]);
+
+
+            for(String rest: restQueues){
+                String[] nameTime = rest.split("-");
+                for(Restaurant restaurant: restaurants){
+                    if (nameTime[0].equals(restaurant.getRestaurants_id())){
+                        Log.w("aqui","aqui");
+                        restaurant.setQueue(nameTime[1]);
+                    }
+                }
+            }
+        }
+
+    }
 
 }

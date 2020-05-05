@@ -49,10 +49,9 @@ public class FoodISTAdapter extends RecyclerView.Adapter<FoodISTAdapter.ViewHold
     GeoApiContext geoApiContext;
 
 
-
-    public FoodISTAdapter(Context ct, Bitmap img, String queue, ArrayList<Restaurant> r){
-        context =ct;
-        restaurants = r ;
+    public FoodISTAdapter(Context ct, Bitmap img, String queue, ArrayList<Restaurant> r) {
+        context = ct;
+        restaurants = r;
 
         //TO DOO
         images = img;
@@ -60,6 +59,7 @@ public class FoodISTAdapter extends RecyclerView.Adapter<FoodISTAdapter.ViewHold
         geoApiContext = new GeoApiContext.Builder().apiKey("AIzaSyBKj_1qFGu2CzxY18nYR-Zb-rxU-Xjhv2Y").build();
 
     }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -72,10 +72,12 @@ public class FoodISTAdapter extends RecyclerView.Adapter<FoodISTAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         holder.textView.setText(restaurants.get(position).getRestaurants_name());
-        holder.textDistance.setText(restaurants.get(position).getRestaurants_time_distance().toString()+" walking");
+        holder.textDistance.setText("Distance: "+restaurants.get(position).getRestaurants_time_distance().toString() + " walking");
+        holder.textqueue.setText("Queue: "+restaurants.get(position).getQueue() + " minutes");
+
 
         //set restaruant profile picture
-        switch(restaurants.get(position).getRestaurants_id()) {
+        switch (restaurants.get(position).getRestaurants_id()) {
             case "ae":
                 holder.imageView.setImageResource(R.drawable.ae);
                 break;
@@ -111,13 +113,12 @@ public class FoodISTAdapter extends RecyclerView.Adapter<FoodISTAdapter.ViewHold
         }
 
 
-        //TO DO
-        holder.textqueue.setText(queueTime);
-
-
         holder.theLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                GlobalClass globalVariable = (GlobalClass) context.getApplicationContext();
+                globalVariable.setCurrentRestaurant(restaurants.get(position).getRestaurants_id());
+
 
                 Intent intent = new Intent(context, RestaurantProfileActivity.class);
 
@@ -126,8 +127,10 @@ public class FoodISTAdapter extends RecyclerView.Adapter<FoodISTAdapter.ViewHold
                 intent.putExtra("latitude", restaurants.get(position).getRestaurants_geoPoint().getLatitude());
                 intent.putExtra("longitude", restaurants.get(position).getRestaurants_geoPoint().getLongitude());
                 intent.putExtra("horario", restaurants.get(position).getHorario());
+                intent.putExtra("queue", restaurants.get(position).getQueue());
+
                 Bundle b = new Bundle();
-                b.putSerializable("serialzable",restaurants.get(position).getMenu().getDishes());
+                b.putSerializable("serialzable", restaurants.get(position).getMenu().getDishes());
                 intent.putExtras(b);
 
 
@@ -152,8 +155,8 @@ public class FoodISTAdapter extends RecyclerView.Adapter<FoodISTAdapter.ViewHold
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            textDistance =  itemView.findViewById(R.id.distanceTime);
-            textqueue =  itemView.findViewById(R.id.queueTime);
+            textDistance = itemView.findViewById(R.id.distanceTime);
+            textqueue = itemView.findViewById(R.id.queueTime);
             textView = itemView.findViewById(R.id.textView1);
             imageView = itemView.findViewById(R.id.imageView1);
             theLayout = itemView.findViewById(R.id.theLayout);

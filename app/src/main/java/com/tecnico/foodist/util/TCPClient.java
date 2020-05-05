@@ -5,6 +5,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.tecnico.foodist.ui.GlobalClass;
+
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -78,6 +80,24 @@ public class TCPClient extends AsyncTask<String, Void, Void> {
 
                     Log.w("response",resp);
 
+                    GlobalClass globalVariable = (GlobalClass) context.getApplicationContext();
+                    globalVariable.setAllQueueTime(resp);
+
+                    dataOutputStream.close();
+                    dataInputStream.close();
+                    break;
+
+                case "LRALLT":
+                    //asks for queue time
+                    dataOutputStream.writeUTF(message);
+
+                    //wait for response
+                    String answ = dataInputStream.readUTF();
+
+                    Log.w("response",answ);
+
+                    globalVariable = (GlobalClass) context.getApplicationContext();
+                    globalVariable.setAllQueueTimeTagus(answ);
                     dataOutputStream.close();
                     dataInputStream.close();
                     break;

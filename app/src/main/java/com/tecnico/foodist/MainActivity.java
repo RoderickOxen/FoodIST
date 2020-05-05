@@ -8,6 +8,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import pt.inesc.termite.wifidirect.SimWifiP2pBroadcast;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -288,6 +289,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intent.putExtra("userLongitude", user.getUserLocation().longitude);
 
         startActivity(intent);
+    }
+
+    public Location getUserLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return null;
+        }
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Location location = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
+
+        Log.d("latitude", String.valueOf(location.getLatitude()));
+        Log.d("longitude", String.valueOf(location.getLongitude()));
+
+        return location;
+
     }
 
 

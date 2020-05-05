@@ -24,37 +24,12 @@
                 android:layout_width="133dp"
                 android:layout_height="133dp"
                 android:layout_margin="1dp"
+                android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/imageView4"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0"
-                android:scaleType="centerCrop"
-                app:srcCompat="@drawable/gnochi700x636" />
-
-            <ImageView
-                android:id="@+id/imageView4"
-                android:layout_width="133dp"
-                android:layout_height="133dp"
-                android:layout_margin="1dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/imageView5"
-                app:layout_constraintStart_toEndOf="@+id/imageView1"
-                app:layout_constraintTop_toTopOf="parent"
-                android:scaleType="centerCrop"
-                app:srcCompat="@drawable/gnochi700x636" />
-
-            <ImageView
-                android:id="@+id/imageView5"
-                android:layout_width="133dp"
-                android:layout_height="133dp"
-                android:layout_margin="1dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageView4"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0"
-                android:scaleType="centerCrop"
                 app:srcCompat="@drawable/gnochi700x636" />
 
 

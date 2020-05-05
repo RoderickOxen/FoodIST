@@ -7,16 +7,17 @@
     tools:context=".ui.ProfileActivity"
     android:background="@color/blueTec1">
 
+
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="186dp"
-        android:layout_height="163dp"
-        android:layout_marginTop="92dp"
+        android:layout_width="154dp"
+        android:layout_height="115dp"
+        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_person_24dp"/>
+        app:srcCompat="@drawable/ic_person_24dp" />
 
 
     <TextView
@@ -25,13 +26,12 @@
         android:layout_height="67dp"
         android:background="@color/colorTecnicoLight"
         android:text="Email"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/design_default_color_on_secondary"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
 
     <TextView
         android:id="@+id/email"
@@ -39,10 +39,10 @@
         android:layout_height="67dp"
         android:background="@color/colorTecnicoLight"
         android:text="Email"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/design_default_color_on_secondary"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/name" />
 
@@ -52,47 +52,59 @@
         android:layout_height="67dp"
         android:background="@color/colorTecnicoLight"
         android:text="Email"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/design_default_color_on_secondary"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email" />
 
+    <TextView
+        android:id="@+id/status2"
+        android:layout_width="290dp"
+        android:layout_height="67dp"
+        android:background="@color/colorTecnicoLight"
+        android:text="Food Contraints: Vegan Meat Fish"
+        android:textColor="@color/design_default_color_on_secondary"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/status" />
+
     <Button
         android:id="@+id/logoutButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="260dp"
+        android:layout_height="50dp"
         android:text="Logout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/status"
-        app:layout_constraintVertical_bias="0.806" />
+        app:layout_constraintTop_toBottomOf="@+id/editProfile"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/editProfile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="260dp"
+        android:layout_height="50dp"
         android:text="Edit Profile"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/status"
-        app:layout_constraintVertical_bias="0.127" />
+        app:layout_constraintTop_toBottomOf="@+id/dietryConstraints" />
 
     <Button
         android:id="@+id/dietryConstraints"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Edit\nDietary Constraints"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="260dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="60dp"
+        android:text="Edit Dietary Constraints"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/status"
-        app:layout_constraintVertical_bias="0.431" />
+        app:layout_constraintTop_toBottomOf="@+id/status2" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

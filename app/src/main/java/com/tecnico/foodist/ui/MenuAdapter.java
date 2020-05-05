@@ -21,14 +21,12 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
 
     int images;
     Context context;
-    String queueTime;
     ArrayList<Dish> menu ;
 
-    public MenuAdapter(Context ct, ArrayList<Dish> dishes, int img , String queue){
+    public MenuAdapter(Context ct, ArrayList<Dish> dishes, int img ){
         context = ct;
         menu = dishes;
         images = img;
-        queueTime = queue;
     }
     @NonNull
     @Override
@@ -45,12 +43,13 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
         Log.w("Adapter menu",menu.get(position).getName());
         holder.textView.setText(menu.get(position).getName());
         holder.imageView.setImageResource(images);
-        holder.textqueue.setText(queueTime);
         holder.textDistance.setText(temp.toString()+ " €");
 
         holder.theLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                GlobalClass globalVariable = (GlobalClass) context.getApplicationContext();
+                globalVariable.setCurrentDish(menu.get(position));
 
                 Intent intent = new Intent(context, DishDetailsActivity.class);
 
@@ -69,7 +68,6 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView textView;
         TextView textDistance;
-        TextView textqueue;
         ImageView imageView;
         androidx.constraintlayout.widget.ConstraintLayout theLayout;
 
@@ -77,7 +75,6 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
             super(itemView);
 
             textDistance = itemView.findViewById(R.id.distanceTime);
-            textqueue = itemView.findViewById(R.id.queueTime);
             textView = itemView.findViewById(R.id.textView1);
             imageView = itemView.findViewById(R.id.imageView1);
             theLayout = itemView.findViewById(R.id.theLayout);

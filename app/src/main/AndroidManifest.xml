@@ -5,7 +5,7 @@
     package="com.tecnico.foodist">
 
 
-
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -15,6 +15,9 @@
         android:glEsVersion="0x00020000"
         android:required="true"/>
 
+    <uses-feature android:name="android.hardware.camera"
+        android:required="false" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,6 +25,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:name=".ui.GlobalClass"
         tools:replace="android:icon,android:theme"
         >
 
@@ -35,9 +39,9 @@
         <activity android:name=".ui.ProfileActivity" />
         <activity android:name=".ui.CreateAccountActivity" />
         <activity android:name=".ui.EditProfileActivity" />
-
-
-
+        <activity android:name=".ui.DietryConstraintActivity" />
+        <activity android:name=".ui.AddDishActivity" />
+        <activity android:name=".ui.PeerScannerActivity" />
 
         <activity android:name=".ui.LoginActivity">
             <intent-filter>
@@ -46,13 +50,16 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.PeerScannerActivity">
-        </activity>
-
+        <provider
+            android:authorities="com.tecnico.foodist.fileprovider"
+            android:name="androidx.core.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
         <service android:name="pt.inesc.termite.wifidirect.service.SimWifiP2pService" />
-
-
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -67,5 +74,4 @@
             android:required="false" />
 
     </application>
-
 </manifest>
